@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="theme-color" content="#E8145F">
+<title>Little Flower Clean</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one narrow column, bottom tab bar, full-screen timer overlay. Candy pink by day, deep plum at night. */
+:root {
+  --bg: #FFF3F8; --surface: #FFFFFF; --surface2: #FFE4EF; --fg: #2B0F20; --muted: #7D4C68; --line: #F5C9DC;
+  --accent: #E8145F; --accent-ink: #FFFFFF; --soft: #FFD3E5;
+  --c-work: #E8145F; --c-hold: #7C4DFF; --c-rest: #0B8F80; --c-warm: #C77700; --c-cool: #4B57D6;
+  --shadow: 0 8px 28px rgba(232, 20, 95, .13);
+  --display: 'Big Shoulders Display', 'Arial Narrow', Impact, sans-serif;
+  --body: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #160913; --surface: #241020; --surface2: #341832; --fg: #FFEBF4; --muted: #D2A7BF; --line: #4C2547;
+    --accent: #FF5C9D; --accent-ink: #2B0B1B; --soft: #4A1F40;
+    --c-work: #FF5C9D; --c-hold: #B69CFF; --c-rest: #4FD6C4; --c-warm: #FFC04D; --c-cool: #9AA3FF;
+    --shadow: 0 8px 28px rgba(0, 0, 0, .45); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #160913; --surface: #241020; --surface2: #341832; --fg: #FFEBF4; --muted: #D2A7BF; --line: #4C2547;
+  --accent: #FF5C9D; --accent-ink: #2B0B1B; --soft: #4A1F40;
+  --c-work: #FF5C9D; --c-hold: #B69CFF; --c-rest: #4FD6C4; --c-warm: #FFC04D; --c-cool: #9AA3FF;
+  --shadow: 0 8px 28px rgba(0, 0, 0, .45); color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.45;
+  padding-block: 10px 112px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  -webkit-tap-highlight-color: transparent;
+}
+.wrap { max-width: 560px; margin: 0 auto; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, .display { font-family: var(--display); text-transform: uppercase; letter-spacing: .01em; line-height: .95; text-wrap: balance; font-weight: 800; }
+h1 { font-size: clamp(40px, 12vw, 56px); }
+h2 { font-size: 30px; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; padding: 0; text-align: left; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.kicker { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.muted { color: var(--muted); }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.row { display: flex; align-items: center; gap: 10px; }
+.between { justify-content: space-between; }
+.wrapf { flex-wrap: wrap; }
+.grow { flex: 1; min-width: 0; }
+.top { display: flex; align-items: center; justify-content: space-between; padding: 6px 0 14px; }
+.brand { font-family: var(--display); font-weight: 900; font-size: 26px; text-transform: uppercase; letter-spacing: .03em; color: var(--accent); }
+.brand span { color: var(--fg); }
+.date { font-size: 13px; color: var(--muted); font-weight: 600; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
+.card.hero { background: var(--accent); color: var(--accent-ink); border-color: transparent; box-shadow: var(--shadow); }
+.card.hero .kicker { color: inherit; opacity: .85; }
+.quote-text { font-size: 19px; font-weight: 600; line-height: 1.3; text-wrap: balance; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 20px; border-radius: 999px; font-weight: 700; background: var(--surface2); color: var(--fg); border: 1px solid var(--line); text-align: center; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; box-shadow: var(--shadow); }
+.btn.block { width: 100%; }
+.btn.small { min-height: 38px; padding: 0 14px; font-size: 14px; }
+.btn.ghost { background: transparent; }
+.hero .btn { background: rgba(255,255,255,.2); color: inherit; border-color: rgba(255,255,255,.4); }
+:root[data-theme="dark"] .hero .btn { background: rgba(43,11,27,.18); border-color: rgba(43,11,27,.35); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hero .btn { background: rgba(43,11,27,.18); border-color: rgba(43,11,27,.35); } }
+.chip { display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border-radius: 999px; background: var(--surface2); border: 1px solid var(--line); font-size: 13px; font-weight: 600; }
+.chip.on { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+button.chip { cursor: pointer; }
+.tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+.tabs .chip { flex: none; }
+
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 4px; min-height: 124px; position: relative; }
+.tile:active, .rowbtn:active, .btn:active { transform: scale(.98); }
+.tile svg { width: 30px; height: 30px; color: var(--accent); margin-bottom: 6px; }
+.tile b { font-family: var(--display); font-size: 25px; text-transform: uppercase; line-height: 1; font-weight: 800; }
+.tile span { font-size: 13px; color: var(--muted); }
+.tile i { position: absolute; top: 12px; right: 14px; font-style: normal; font-size: 12px; font-weight: 700; color: var(--muted); }
+.rowbtn { width: 100%; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: flex; align-items: center; gap: 12px; }
+.rowbtn b { display: block; font-weight: 700; }
+.rowbtn .sub { font-size: 13px; color: var(--muted); }
+.rowbtn .meta { font-family: var(--display); font-weight: 800; font-size: 24px; color: var(--accent); white-space: nowrap; }
+.back { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--muted); min-height: 40px; }
+.back svg, .icon svg { width: 20px; height: 20px; }
+
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.steps li { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+.steps li:last-child { border-bottom: 0; }
+.steps li span:last-child { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: none; margin-top: 6px; background: var(--c-work); }
+.dot.warm { background: var(--c-warm); } .dot.rest { background: var(--c-rest); } .dot.cool { background: var(--c-cool); } .dot.hold { background: var(--c-hold); }
+
+.bar { height: 10px; border-radius: 999px; background: var(--surface2); overflow: hidden; border: 1px solid var(--line); }
+.bar > i { display: block; height: 100%; background: var(--accent); border-radius: 999px; width: 0; transition: width .3s; }
+.stat { display: flex; flex-direction: column; gap: 2px; }
+.stat b { font-family: var(--display); font-size: 36px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field label { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+input[type="number"] { font: inherit; font-size: 18px; font-weight: 700; width: 100%; min-height: 48px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); padding: 0 12px; }
+.form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.day { aspect-ratio: 1; max-width: 100%; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; text-align: center; }
+.day.done { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.day.today { border: 2px solid var(--accent); }
+.day.miss { color: var(--muted); background: var(--surface2); }
+.day.future { color: var(--muted); opacity: .6; }
+
+.week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; align-items: end; height: 110px; }
+.week div { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; gap: 6px; font-size: 11px; color: var(--muted); font-weight: 700; }
+.week i { display: block; width: 100%; background: var(--accent); border-radius: 8px 8px 3px 3px; min-height: 4px; opacity: .9; }
+.week div.empty i { background: var(--line); opacity: 1; }
+
+.switch { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.switch:last-child { border-bottom: 0; }
+.tog { width: 52px; height: 30px; border-radius: 999px; background: var(--line); position: relative; flex: none; transition: background .2s; }
+.tog::after { content: ''; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.tog.on { background: var(--accent); }
+.tog.on::after { transform: translateX(22px); }
+
+nav#nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--surface); border-top: 1px solid var(--line);
+  padding: 8px max(10px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px)); }
+nav#nav .in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
+nav#nav button { padding: 0 2px; display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 52px; justify-content: center; border-radius: 14px; color: var(--muted); font-size: 11.5px; font-weight: 700; text-align: center; }
+nav#nav button svg { width: 24px; height: 24px; }
+nav#nav button.on { color: var(--accent); background: var(--surface2); }
+
+#toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(92px + env(safe-area-inset-bottom, 0px)); z-index: 90; background: var(--fg); color: var(--bg); padding: 12px 18px; border-radius: 14px; font-weight: 600; max-width: min(92vw, 420px); text-align: center; box-shadow: var(--shadow); }
+
+/* full-screen overlays: workout player and run tracker */
+.overlay { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; gap: 10px; overflow: hidden;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: var(--bg); background: color-mix(in srgb, var(--phase, var(--c-work)) 15%, var(--bg)); transition: background .35s; }
+.overlay > .col { width: 100%; max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; flex: 1; min-height: 0; }
+.flash { position: absolute; inset: 0; background: var(--phase, var(--accent)); opacity: 0; pointer-events: none; z-index: 70; }
+.flash.on { animation: flash .7s ease-out; }
+@keyframes flash { 0% { opacity: .8; } 100% { opacity: 0; } }
+.ptop { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.icon { width: 46px; height: 46px; border-radius: 50%; background: var(--surface); border: 1px solid var(--line); display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.icon.off { opacity: .45; }
+.phase { font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: .08em; font-size: 20px; color: var(--phase, var(--accent)); text-align: center; }
+.ringwrap { position: relative; width: min(74vw, 46vh, 340px); aspect-ratio: 1; margin: 0 auto; flex: none; }
+.ringwrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ringwrap .bg { stroke: var(--line); }
+.ringwrap .fg { stroke: var(--phase, var(--accent)); transition: stroke .3s; }
+.ringwrap .mid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+.time { font-family: var(--display); font-weight: 800; font-size: clamp(76px, 24vw, 124px); line-height: .9; font-variant-numeric: tabular-nums; }
+.pname { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: clamp(30px, 9.5vw, 46px); line-height: 1; text-align: center; text-wrap: balance; overflow-wrap: anywhere; }
+.ptip { text-align: center; color: var(--muted); font-size: 15px; min-height: 22px; text-wrap: balance; }
+.pnext { text-align: center; font-weight: 700; font-size: 15px; }
+.pnext span { color: var(--muted); font-weight: 600; }
+.badges { display: flex; gap: 10px; justify-content: center; }
+.badge { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 8px 16px; text-align: center; min-width: 120px; }
+.badge b { display: block; font-family: var(--display); font-weight: 800; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.badge span { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.ctrls { display: flex; align-items: center; justify-content: center; gap: 22px; }
+.ctrls .icon { width: 58px; height: 58px; }
+.ctrls .icon.big { width: 84px; height: 84px; background: var(--accent); color: var(--accent-ink); border-color: transparent; box-shadow: var(--shadow); }
+.ctrls .icon.big svg { width: 34px; height: 34px; }
+.ctrls .icon svg { width: 26px; height: 26px; }
+.pfoot { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.sheet { position: absolute; inset: 0; z-index: 80; background: rgba(20, 5, 14, .7); display: flex; align-items: flex-end; justify-content: center; padding: 16px; }
+.sheet > div { width: 100%; max-width: 520px; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+.done-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 18px; text-align: center; }
+.done-wrap .big { font-family: var(--display); font-weight: 900; font-size: clamp(56px, 18vw, 88px); line-height: .9; text-transform: uppercase; color: var(--accent); }
+.note { font-size: 13px; color: var(--muted); }
+.warn { background: var(--surface2); border: 1px dashed var(--line); border-radius: 14px; padding: 12px; font-size: 14px; }
+@media (prefers-reduced-motion: reduce) { .flash.on { animation-duration: 1.4s; } .tile:active, .rowbtn:active, .btn:active { transform: none; } * { scroll-behavior: auto !important; } }
+
+/* Little Flower Clean additions */
+input[type="text"], select { font: inherit; font-size: 16px; font-weight: 600; width: 100%; min-height: 48px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); padding: 0 12px; }
+.check { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--accent); background: var(--surface); flex: none; display: inline-flex; align-items: center; justify-content: center; color: var(--accent-ink); }
+.check svg { width: 20px; height: 20px; opacity: 0; }
+.check.on { background: var(--accent); }
+.check.on svg { opacity: 1; }
+.trow { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.trow:last-child { border-bottom: 0; }
+.trow .tt { flex: 1; min-width: 0; text-align: left; }
+.trow .tt b { display: block; font-weight: 700; line-height: 1.25; }
+.trow .tt .sub { font-size: 13px; color: var(--muted); }
+.trow.done .tt b { text-decoration: line-through; color: var(--muted); }
+.more { width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); font-weight: 800; font-size: 20px; flex: none; }
+.tpanel { background: var(--surface2); border-radius: 12px; padding: 12px; margin: 0 0 10px 46px; display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+.grp { font-family: var(--display); font-weight: 800; font-size: 20px; text-transform: uppercase; letter-spacing: .02em; color: var(--accent); padding-top: 6px; }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; background: var(--soft); color: var(--fg); }
+.pill.due { background: var(--accent); color: var(--accent-ink); }
+.tile em { font-style: normal; font-size: 12px; font-weight: 700; color: var(--accent); }
+.ring { width: 100%; }
+@media (max-width: 360px) { nav#nav button { font-size: 10.5px; } }
+</style><style>[hidden]{display:none!important} html{padding-top:env(safe-area-inset-top,0px)}</style></head><body>
+<div class="wrap">
+  <header class="top"><div class="brand">Little Flower <span>Clean</span></div><div class="date" id="today"></div></header>
+  <main id="view"></main>
+</div>
+<nav id="nav"><div class="in" id="navin"></div></nav>
+<div id="player" class="overlay" hidden></div>
+<div id="toast" hidden></div>
+<script>
+/* Little Flower Clean data: rooms, tasks, sprints, quotes, challenges */
+(function () {
+  'use strict';
+
+  /* ---------- frequencies ---------- */
+  var FREQ = { d: { days: 1, label: 'Daily' }, w: { days: 7, label: 'Weekly' }, b: { days: 14, label: 'Every 2 weeks' }, m: { days: 30, label: 'Monthly' }, q: { days: 90, label: 'Every 3 months' }, y: { days: 365, label: 'Yearly' } };
+
+  /* ---------- rooms ---------- */
+  var ZONES = [
+    { id: 'kitchen', name: 'Kitchen', sub: 'Counters, stove, fridge', icon: 'kitchen' },
+    { id: 'bath', name: 'Bathrooms', sub: 'Toilet, shower, sink', icon: 'bath' },
+    { id: 'primary', name: 'Primary Bedroom', sub: 'Bed, closet, floors', icon: 'bed' },
+    { id: 'kids', name: 'Kids’ Rooms', sub: 'Toys, beds, clothes', icon: 'star' },
+    { id: 'living', name: 'Living Room', sub: 'Couch, dust, floors', icon: 'sofa' },
+    { id: 'dining', name: 'Dining Room', sub: 'Table and floors', icon: 'dining' },
+    { id: 'laundry', name: 'Laundry', sub: 'Wash, fold, put away', icon: 'washer' },
+    { id: 'entry', name: 'Entry and Mudroom', sub: 'Shoes, mail, doormat', icon: 'door' },
+    { id: 'halls', name: 'Halls and Stairs', sub: 'Rails, floors, clutter', icon: 'stairs' },
+    { id: 'office', name: 'Office', sub: 'Desk, paper, screens', icon: 'desk' },
+    { id: 'garage', name: 'Garage', sub: 'Sweep, sort, recycle', icon: 'garage' },
+    { id: 'outside', name: 'Outdoor and Car', sub: 'Porch, yard, car', icon: 'car' },
+    { id: 'whole', name: 'Whole House', sub: 'Windows, vents, switches', icon: 'home' }
+  ];
+
+  /* Task lines: area | task | freq | minutes | kid-friendly(1/0) | tip.
+     IDs are zone + position, so ONLY add new lines at the end of a zone. */
+  var RAW = {};
+  RAW.kitchen = `
+Dishes|Load the dishwasher or wash by hand|d|8|1|Fill one side of the sink with hot soapy water first.
+Dishes|Empty the dishwasher|d|4|1|Do it first thing so dirty dishes have a home all day.
+Counters|Clear and wipe the counters|d|4|1|Clear everything off, spray, then wipe top to bottom.
+Counters|Wipe backsplash and light switches|w|3|1|Switches are the grubbiest spot nobody sees.
+Sink|Rinse and wipe the sink|d|2|1|A dry, empty sink makes the whole kitchen look clean.
+Sink|Scrub sink and shine the faucet|w|5|0|Baking soda, then a squeeze of lemon. Dry with a cloth to shine.
+Sink|Freshen the disposal and drain|m|3|0|Ice cubes and citrus peels, then run cold water.
+Stove|Wipe the stovetop|d|3|0|Wipe while it is still warm, not hot.
+Stove|Scrub burners, knobs and drip pans|m|10|0|Soak the knobs in warm soapy water while you scrub.
+Stove|Degrease range hood and filter|m|10|0|Soak the filter in hot water and dish soap.
+Oven|Wipe oven door and handle|w|2|1|
+Oven|Deep clean the oven|q|30|0|Self-clean cycle, or a baking soda paste overnight.
+Microwave|Steam clean the microwave|w|5|1|Bowl of water and lemon for 3 minutes, then wipe it out.
+Fridge|Toss expired food and leftovers|w|8|0|Do it right before grocery day.
+Fridge|Wipe fridge shelves and drawers|m|15|0|Take one shelf out at a time so it is not overwhelming.
+Fridge|Wipe fridge door and handles|w|2|1|
+Fridge|Vacuum the fridge coils|y|10|0|Unplug first. Cleaner coils mean a cooler fridge and a lower bill.
+Freezer|Clear out the freezer|q|10|0|Anything with ice crystals goes.
+Pantry|Straighten pantry and check dates|m|12|0|Group like with like and put the oldest items in front.
+Pantry|Wipe pantry shelves|q|15|0|
+Cabinets|Wipe cabinet fronts and handles|w|5|1|Focus on the handles and around the stove.
+Cabinets|Clean inside cabinets and drawers|q|20|0|Do one cabinet a day if you like.
+Small appliances|Wipe coffee maker, toaster and air fryer|w|5|1|
+Small appliances|Run a vinegar cycle through the coffee maker|q|15|0|Half white vinegar, half water, then two rinse cycles.
+Small appliances|Empty the toaster crumb tray|m|2|1|
+Floors|Sweep the kitchen floor|d|4|1|
+Floors|Mop the kitchen floor|w|10|0|Mop toward the door so you do not step on wet floor.
+Trash|Take out the trash and put in a new liner|d|3|1|
+Trash|Wash the trash can|m|8|0|Spray, scrub with a brush, rinse outside, let it dry in the sun.`;
+  RAW.bath = `
+Toilet|Quick wipe of toilet seat and rim|d|2|0|Keep a pack of disinfecting wipes within reach.
+Toilet|Scrub bowl, base and behind the toilet|w|5|0|Let the cleaner sit 5 minutes before you scrub.
+Sink and vanity|Wipe sink, faucet and counter|d|3|1|
+Sink and vanity|Scrub sink and drain|w|4|0|
+Sink and vanity|Declutter counter and drawers|m|10|0|If you have not used it in 3 months, toss it.
+Shower and tub|Squeegee or wipe shower walls after use|d|2|1|Prevents soap scum and mildew.
+Shower and tub|Scrub shower, tub and tile|w|12|0|Spray first, do the toilet while it soaks, then scrub.
+Shower and tub|Clear the hair catcher|w|2|0|
+Shower and tub|Descale the shower head|q|10|0|Bag of white vinegar rubber-banded over the head for an hour.
+Shower and tub|Wash the shower curtain or liner|m|10|0|Toss it in the washer with a few towels.
+Mirror|Wipe the mirror|w|2|1|
+Floor|Sweep or vacuum the bathroom floor|w|3|1|
+Floor|Mop the bathroom floor|w|6|0|
+Towels and rugs|Swap in fresh towels|w|3|1|
+Towels and rugs|Wash the bath mat|b|5|1|
+Trash and supplies|Empty the bathroom trash|w|2|1|
+Trash and supplies|Restock toilet paper and soap|w|2|1|
+Trash and supplies|Toss expired products|q|10|0|
+Fan|Dust the exhaust fan cover|q|5|0|`;
+  RAW.primary = `
+Bed|Make the bed|d|2|1|Making your bed is the cheapest way to make a room look clean.
+Bed|Change the sheets|w|10|0|
+Bed|Wash pillows and comforter|q|15|0|
+Bed|Rotate the mattress|q|5|0|
+Surfaces|Clear nightstands and dresser top|w|5|0|
+Surfaces|Dust all surfaces, lamps and headboard|w|6|0|Dust top to bottom so it falls where you have not cleaned yet.
+Floor|Vacuum the floor|w|8|1|
+Floor|Vacuum under the bed|m|8|0|
+Closet|Clothes into the hamper, shoes in place|d|3|1|
+Closet|Tidy closet shelves|m|15|0|
+Closet|Donate pile: pull what you do not wear|q|20|0|
+Mirrors and windows|Wipe mirror and window sills|m|5|0|
+Trash|Empty the bedroom trash|w|2|1|`;
+  RAW.kids = `
+Beds|Make the bed|d|2|1|Tuck it in, pillow on top. Done.
+Beds|Strip and wash the sheets|w|10|0|
+Floor|Floor pick-up: toys, clothes, trash|d|5|1|If it is on the floor, it goes in a bin or the hamper.
+Floor|Vacuum the floor|w|8|1|
+Floor|Vacuum under the bed and dressers|m|8|0|
+Toys|Toys back in their bins|d|5|1|Make it a race. Beat the clock.
+Toys|Sort toys and donate what they outgrew|q|20|0|
+Toys|Wipe down or sanitize toys|m|15|0|
+Clothes|Dirty clothes into the hamper|d|2|1|
+Clothes|Tidy dresser drawers|m|10|1|
+Clothes|Pull outgrown clothes|q|20|0|
+Desk and school|Empty backpack and lunch box|d|3|1|
+Desk and school|Clear the desk|w|5|1|
+Surfaces|Dust shelves and dressers|w|5|1|Give them a sock or cloth and make it a game.
+Trash|Empty the trash|w|2|1|`;
+  RAW.living = `
+Daily reset|Fluff pillows, fold blankets, reset the couch|d|3|1|
+Daily reset|Pick up clutter and put it away|d|5|1|Use a basket and carry it room to room.
+Daily reset|Clear the coffee table|d|2|1|
+Dusting|Dust surfaces, shelves and TV stand|w|8|0|
+Dusting|Wipe remotes and light switches|w|2|1|
+Dusting|Wipe TV and screens|w|2|1|
+Floors|Vacuum the floor and rugs|w|10|1|
+Floors|Mop hard floors|b|10|0|
+Furniture|Vacuum couch and under the cushions|b|8|1|You may find change, snacks, and a missing toy.
+Furniture|Spot clean upholstery|m|10|0|
+Furniture|Wash throw blankets and pillow covers|m|10|0|
+Windows|Wipe windows and sills|m|10|0|
+Windows|Clean glass doors|m|5|0|
+Corners|Dust ceiling fan and corners|q|10|0|Pillowcase over the blade, pull back, and the dust stays inside.
+Corners|Wipe baseboards|m|10|1|
+Trash|Empty the trash|w|2|1|`;
+  RAW.dining = `
+Table|Clear and wipe the table after meals|d|3|1|
+Table|Wipe chairs and chair legs|w|5|1|
+Table|Wash tablecloth and placemats|b|5|0|
+Floor|Sweep or vacuum under the table|d|3|1|
+Floor|Mop the dining floor|w|8|0|
+Surfaces|Dust buffet or china cabinet|b|6|0|
+Surfaces|Clear the mail and paper pile|w|5|0|
+Lights|Dust the light fixture|q|10|0|
+Windows|Wipe window sills|m|5|0|`;
+  RAW.laundry = `
+Wash|Start a load of laundry|d|3|1|Start one at breakfast and one after dinner.
+Wash|Move the load to the dryer|d|2|1|
+Wash|Fold and put away|d|10|1|Fold while you watch something. It goes twice as fast.
+Dryer|Clear the lint filter|d|1|1|
+Dryer|Clear the dryer vent and hose|y|20|0|A blocked vent is a fire risk. Do this one every year.
+Washer|Run a washer cleaning cycle|m|5|0|Hot water and a washer cleaning tablet or vinegar.
+Washer|Wipe the washer door seal|m|3|0|Mildew hides in the rubber ring.
+Surfaces|Wipe machines and shelves|w|4|1|
+Surfaces|Sweep the laundry floor|w|3|1|
+Supplies|Restock detergent and dryer sheets|m|2|1|
+Towels|Wash towels and bath mats|w|5|0|
+Baskets|Clear the ironing and mending basket|w|10|0|`;
+  RAW.entry = `
+Shoes and bags|Line up shoes, hang coats and bags|d|3|1|Give every person one hook and one spot for shoes.
+Mail|Sort the mail, recycle the junk|d|3|0|Open it over the recycling bin.
+Door|Wipe door handle and light switch|w|2|1|
+Floor|Sweep the entry and shake out mats|w|4|1|
+Floor|Mop the entry floor|b|6|0|
+Floor|Wash the doormat and entry rugs|q|8|0|
+Closet|Clear out the coat closet and lost-and-found|q|15|0|
+Glass|Wipe the front door glass|m|5|0|
+Seasonal|Swap seasonal gear|q|20|0|`;
+  RAW.halls = `
+Clutter|Clear things off the stairs|d|2|1|Everything on the stairs goes up or down in one basket trip.
+Floors|Vacuum hallways|w|6|1|
+Floors|Vacuum the stairs|w|8|0|Work from the top step down, handheld if you have one.
+Floors|Mop hall floors|b|8|0|
+Rails|Wipe handrails, banister and spindles|w|4|1|
+Walls|Dust picture frames and vents|m|6|0|
+Walls|Spot clean scuffs on walls|m|8|0|A magic eraser takes marks off in seconds.
+Corners|Knock down cobwebs and ceiling corners|q|10|0|`;
+  RAW.office = `
+Desk|Clear the desk at the end of the day|d|3|0|
+Desk|Wipe desk, keyboard and mouse|w|4|0|
+Desk|Dust monitors and shelves|w|5|0|
+Paper|Sort the paper pile|w|10|0|File it, shred it, or act on it. Do not put it back.
+Paper|File and shred old paperwork|q|20|0|
+Floor|Vacuum the floor|w|6|0|
+Trash|Empty trash, recycling and shred bin|w|2|1|
+Drawers|Declutter cables and drawers|q|15|0|
+Drawers|Empty out desk drawers and reset|y|20|0|`;
+  RAW.garage = `
+Floor|Sweep the garage floor|m|10|1|
+Floor|Degrease oil stains|y|20|0|
+Recycling|Break down boxes, take out recycling|w|5|1|
+Bins|Rinse the outdoor trash and recycling cans|q|10|0|
+Storage|Organize tools and shelves|q|30|0|
+Storage|Straighten the sports gear bin|m|10|1|
+Donate|Take a donation run|q|15|0|
+Corners|Clear cobwebs|q|5|0|`;
+  RAW.outside = `
+Porch|Sweep the porch and front steps|w|5|1|
+Porch|Wipe the front door and knob|m|3|1|
+Porch|Wipe patio furniture|m|10|1|
+Porch|Dust outdoor light fixtures and cobwebs|q|5|0|
+Yard|Pick up toys and trash in the yard|w|5|1|
+Yard|Water plants and pull weeds|w|10|1|
+Yard|Clean the grill|m|15|0|
+Yard|Roll bins to the curb and back|w|3|1|
+Car|Empty the trash from the car|w|3|1|
+Car|Vacuum the car|m|12|1|
+Car|Wipe dash, doors and handles|m|8|1|
+Car|Wash the car|m|20|1|Kids love this one. Bring the hose.
+Car|Clean the windows inside|q|6|0|`;
+  RAW.whole = `
+Daily reset|One-basket sweep: return stray items to their rooms|d|5|1|
+Switches and doors|Wipe light switches and door handles, all rooms|w|5|1|
+Switches and doors|Spot clean doors and door frames|m|15|0|
+Windows|Wash interior windows|q|30|0|
+Windows|Clean window tracks and screens|y|30|0|
+Windows|Dust blinds|m|15|0|
+Windows|Wash curtains|y|20|0|
+Walls|Wipe baseboards throughout the house|q|20|0|
+Air|Dust ceiling fans and vents|q|15|0|
+Air|Change the HVAC filter|q|5|0|Write the date on the new filter.
+Safety|Test smoke and CO alarms|m|3|1|
+Floors|Move furniture and vacuum underneath|q|30|0|
+Floors|Shampoo carpets|y|60|0|
+Declutter|Donate box: drop off what you collected|m|10|0|
+Mattresses|Vacuum all mattresses|q|15|0|`;
+
+  var TASKS = [];
+  ZONES.forEach(function (z) {
+    RAW[z.id].split('\n').forEach(function (line) {
+      line = line.trim(); if (!line) return;
+      var p = line.split('|');
+      TASKS.push({ id: z.id + '-' + (TASKS.filter(function (t) { return t.zone === z.id; }).length + 1), zone: z.id, area: p[0], name: p[1], freq: p[2], mins: +p[3], kid: p[4] === '1', tip: p[5] || '' });
+    });
+  });
+
+  /* ---------- timed sprints ---------- */
+  /* step: [name, seconds, tip, type]  type: w warm-up(supplies), k clean (default), r break, c cool-down */
+  var TY = { w: 'warm', k: 'work', r: 'rest', c: 'cool' };
+  function seq(list) {
+    return list.map(function (e) {
+      var s = { t: TY[e[3] || 'k'], n: e[0], d: e[1] };
+      if (e[2]) s.tip = e[2];
+      return s;
+    });
+  }
+  var SPRINTS = [];
+  function sp(id, name, desc, kids, list) {
+    var steps = seq(list), secs = steps.reduce(function (a, s) { return a + s.d; }, 0);
+    SPRINTS.push({ id: id, name: name, desc: desc, kids: !!kids, steps: steps, secs: secs, mins: Math.round(secs / 60) });
+  }
+  sp('panic5', '5-Minute Panic Tidy', 'Company in five minutes? This makes the main rooms look clean, fast.', false, [
+    ['Grab a laundry basket', 20, 'Trash bag in one hand, basket in the other.', 'w'], ['Basket sweep', 90, 'Throw everything that is out of place into the basket.'],
+    ['Clear the surfaces', 60, 'Counters, tables, coffee table.'], ['Fluff the couch', 30], ['Wipe the kitchen counter', 60], ['Bathroom sink and toilet check', 40]]);
+  sp('morning10', '10-Minute Morning Launch', 'Start the day with a house that works for you.', true, [
+    ['Make the beds', 120, 'Tuck, smooth, pillow on top.'], ['Dishes into the dishwasher', 150], ['Wipe the counters', 90], ['Bathroom sink and towels', 90, 'Wipe the sink, hang the towels straight.'],
+    ['Basket sweep', 90, 'Carry strays back to their rooms.'], ['Last look', 60, 'Walk through and fix the one thing that bugs you most.', 'c']]);
+  sp('bed10', '10-Minute Bedtime Reset', 'Wake up to a calm kitchen and living room.', true, [
+    ['Load and start the dishwasher', 150], ['Wipe the counters', 90], ['Sweep the kitchen floor', 90], ['Take out the trash, new liner', 60],
+    ['Living room basket sweep', 120], ['Set out tomorrow: bags, shoes, lunches', 60], ['Start the coffee maker', 30, 'Future you says thank you.', 'c']]);
+  sp('kitchen15', '15-Minute Kitchen Reset', 'A fast reset that makes the whole kitchen shine.', false, [
+    ['Grab spray, cloth and trash bag', 30, '', 'w'], ['Clear the counters', 90], ['Dishes', 180], ['Fridge: toss expired food', 120], ['Wipe appliance fronts', 90],
+    ['Stovetop', 90], ['Spray and wipe the counters', 90], ['Scrub and shine the sink', 120], ['Sweep the floor', 90]]);
+  sp('bath15', '15-Minute Bathroom Blitz', 'Top to bottom, in the order that saves the most time.', false, [
+    ['Gloves on, spray everything', 30, 'Toilet, shower, sink. Let the cleaner sit.', 'w'], ['Spray it all and let it soak', 60], ['Mirror', 60], ['Sink and counter', 120],
+    ['Scrub the toilet', 120], ['Scrub the shower and tub', 240], ['Sweep and wipe the floor', 150], ['Fresh towels, empty the trash', 60], ['Rinse and final look', 60, 'Squeegee the shower door and check for streaks.', 'c']]);
+  sp('living20', '20-Minute Living Room Refresh', 'Declutter, dust and vacuum in one go.', false, [
+    ['Grab a basket and cloth', 30, '', 'w'], ['Trash and dishes out', 120], ['Basket sweep', 180], ['Fluff and fold', 120], ['Dust top to bottom', 240],
+    ['Wipe TV, remotes and switches', 90], ['Vacuum the couch', 120], ['Vacuum the floor', 300]]);
+  sp('bedroom20', '20-Minute Bedroom Refresh', 'Fresh sheets and a calm room to land in.', false, [
+    ['Grab a basket', 30, '', 'w'], ['Strip the sheets and start the wash', 60], ['Clothes to the hamper', 120], ['Clear nightstands and dresser', 120], ['Dust', 150],
+    ['Mirror and window sill', 60], ['Fresh sheets, make the bed', 240], ['Vacuum', 300], ['Closet floor pick-up', 120]]);
+  sp('power30', '30-Minute Whole-House Power Clean', 'The best bang for 30 minutes. Put your favorite music on.', false, [
+    ['Music on. Grab your caddy and a trash bag.', 60, '', 'w'], ['Kitchen: counters and sink', 300], ['Living room: pick up and dust', 300], ['Bathroom: toilet, sink and mirror', 300],
+    ['Bedrooms: make the beds, pick up', 240], ['Entry: shoes and sweep', 120], ['Vacuum the main areas', 360], ['Mop kitchen and bathroom floors', 120]]);
+  sp('kids10', '10-Minute Kids’ Cleanup Party', 'Beat the clock together. Perfect for your crew.', true, [
+    ['Pick a song and grab a bin', 20, '', 'w'], ['Toy tornado: toys into bins', 150], ['Clothes into the hamper', 90], ['Books and games back on the shelf', 90], ['Trash treasure hunt', 60, 'Find every wrapper and scrap of paper.'],
+    ['Make your bed', 90], ['Dishes to the sink', 60], ['Victory dance', 40, 'You did it. Dance it out.', 'c']]);
+  sp('guests30', 'Guests in 30 Minutes', 'Panic mode, with a plan. Guests see the bathroom, kitchen and living room first.', false, [
+    ['Deep breath. Grab baskets and a trash bag.', 30, '', 'w'], ['Hide clutter in baskets', 240, 'Put the baskets in a bedroom. Deal with them tomorrow.'], ['Bathroom: toilet, sink, mirror', 360],
+    ['Kitchen: dishes in, counters wiped', 360], ['Living room: tidy and fluff', 300], ['Vacuum or sweep visible floors', 300], ['Entry: shoes and doormat', 60],
+    ['Trash out, fresh hand towel', 60], ['Open windows or light a candle', 30], ['Final walk-through', 60, 'Look at it like a guest would.', 'c']]);
+  sp('laundry20', '20-Minute Laundry Catch-up', 'Clear the pile and put it all away.', true, [
+    ['Gather the hampers', 60, '', 'w'], ['Sort lights, darks and towels', 120], ['Start one or two loads', 120], ['Fold towels first', 300], ['Fold clothes', 300], ['Put it away', 240], ['Wipe machines, clear lint', 60]]);
+  sp('kitchen45', '45-Minute Deep Kitchen', 'The full kitchen deep clean in one session.', false, [
+    ['Gather supplies and music', 60, '', 'w'], ['Fridge: empty shelves and toss', 300], ['Fridge: wipe shelves and drawers', 300], ['Cabinet fronts and handles', 180], ['Stovetop deep clean', 360],
+    ['Oven door and hood', 240], ['Steam clean the microwave', 240], ['Small appliances', 180], ['Backsplash and switches', 180], ['Counters', 180], ['Sink and drain', 180], ['Mop the floor', 300]]);
+  sp('weekend60', '60-Minute Weekend Reset', 'One hour and the whole house is ready for the week.', false, [
+    ['Music, caddy, trash bag', 60, '', 'w'], ['Kitchen: dishes, counters, stove, sink', 600], ['Bathrooms: toilets, sinks, showers', 720], ['Bedrooms: sheets and beds', 600], ['Living and dining: dust and tidy', 480],
+    ['Laundry: start, fold, put away', 360], ['Vacuum and mop floors', 480], ['Entry, trash and recycling', 240], ['Reward time', 60, 'Light a candle. You earned it.', 'c']]);
+  sp('declutter15', '15-Minute Declutter Dash', 'Four piles: trash, donate, relocate, keep.', false, [
+    ['Set up three bags or boxes', 30, 'Trash, donate, relocate.', 'w'], ['Trash sweep', 180, 'Go room to room. If it is broken or empty, it goes.'], ['Donate hunt', 180, 'Anything unused for a year.'], ['Relocate items', 180, 'Return everything to its home.'],
+    ['Clear one drawer', 180], ['Donate bag to the car, final look', 150, '', 'c']]);
+  sp('fridge15', '15-Minute Fridge and Pantry Purge', 'Know what you have and stop wasting food.', false, [
+    ['Grab a trash bag and wipes', 30, '', 'w'], ['Fridge: top shelves', 150], ['Fridge: bottom shelves and drawers', 150], ['Fridge door shelves', 90], ['Freezer scan', 90], ['Pantry: check dates', 150],
+    ['Pantry: group and line up', 120], ['Wipe shelves', 60], ['Write the shopping list', 60, '', 'c']]);
+
+  /* ---------- messages ---------- */
+  var QUOTES = [
+    'A clean house is not about perfect. It is about peace.', 'Ten minutes now beats an hour later.', 'You do not have to clean it all. You only have to start.',
+    'Small steps every day. That is how a house stays clean.', 'Future you walks in and says thank you.', 'Done is better than perfect.',
+    'One room at a time. One task at a time.', 'Your home takes care of you. Take care of it.', 'Set the timer. Beat the mess.',
+    'Clutter is just postponed decisions. Decide.', 'You are not behind. You are starting.', 'Every wipe, every fold, every load counts.',
+    'Make the bed. You have already won the morning.', 'Progress, not perfection.', 'If it takes less than two minutes, do it now.',
+    'A tidy space, a clear mind.', 'You can do hard things. Even the bathroom.', 'Clean it like you love the people who live here. Because you do.',
+    'The hardest part is starting. You already did.', 'Put on music. Turn chores into a dance party.', 'Look how far you have come in just a few minutes.',
+    'Clean as you go. Your future self is watching.', 'You do not need motivation. You need the timer.', 'Messy house, strong heart. Let us tidy a little anyway.',
+    'Imagine the feeling of walking into a clean kitchen. Go get it.', 'Little and often beats big and never.', 'Your effort today is tomorrow’s calm.',
+    'Finish the task, then enjoy the glow.', 'A reset is always one basket away.', 'You are building a home that feels good.',
+    'Dust today, relax tomorrow.', 'Clear the counters, clear your head.', 'You are doing better than you think.', 'The mess did not happen in a day. It will not clear in one either. Keep going.',
+    'Every drawer you organize is a little win.', 'Start with the spot that bugs you most.', 'Make it fun. Race the clock. Beat your own record.',
+    'Fresh sheets are a love language.', 'Good habits make clean homes.', 'Celebrate the small stuff. It adds up.',
+    'You are teaching your family how to care for a home.', 'Teamwork makes the dream house work.', 'Say it with me: I only need five minutes.',
+    'Clean space, bright mood.', 'Bit by bit, the whole house shines.', 'Do it tired. Do it now. Feel great after.',
+    'The sink empty is the best view in the house.', 'Own the chaos. Then clear it.', 'Every pass of the vacuum is a pass at peace.',
+    'You can rest after the timer. Right now, sparkle.', 'It does not have to be hard. It has to be done.', 'Soap, water, and a stubborn heart. You win.',
+    'Today’s you made tomorrow’s you smile.', 'The best cleaning product is momentum.', 'Show your home some love and it loves you back.',
+    'Clear surfaces, calm mind.', 'Pick up five things. That is all. Then five more.', 'The first minute is the hardest. Then it flows.',
+    'You are the reason this home runs.', 'You are allowed to love a clean house and a messy day.', 'Done and dusted, literally.',
+    'Spray, wipe, repeat. You are unstoppable.', 'Neat is a habit, not a talent.', 'Take the win. Take the nap. Take the credit.',
+    'Open the windows. Let in the fresh start.', 'You just made your space better. Say that again.', 'Do one thing now. Everything else gets easier.',
+    'If they can see the floor, you are crushing it.', 'Your future self is cheering for you.', 'A little cleaning is better than a lot of worrying.',
+    'The mess is temporary. The pride is permanent.', 'Gloves on. Phone down. Let us go.', 'You make this house a home.',
+    'One load, one drawer, one counter. Pick one.', 'Look at the corner you just conquered.', 'Be proud. That was real work.',
+    'Clean what you can. Let go of the rest.', 'You are one tidy room away from feeling lighter.', 'Streaks start with one day.',
+    'Cleaning is care in action.', 'Your pace is the right pace.', 'Mop like a boss.',
+    'Good vibes, clean floors.', 'Every minute counts. Every task counts.', 'Be the person who makes it sparkle.',
+    'The house is not the problem. The pile is, and piles can be sorted.', 'Doing a little each day keeps weekend free.', 'Break it into tiny steps. Then step.',
+    'Choose progress over pressure.', 'Your future guests will think you have a housekeeper.', 'Nothing beats the smell of clean.',
+    'Make it smell like fresh and feel like calm.', 'Stay with it for ten minutes. See what happens.', 'You are a cleaning legend in the making.',
+    'Tough start, shiny finish.', 'Mess less, stress less.', 'You have got the energy. You have got the timer. Go!',
+    'Your home reflects your care, not your perfection.', 'Pour a coffee. Hit start. Make it shine.', 'Celebrate every checked box.',
+    'The little things you do every day build the home you want.', 'A task is only scary until you start.', 'A done list feels so good.',
+    'Wipe it, fold it, love it.', 'Cleaning is cheaper than therapy, and you get a clean house.', 'Make space for what matters.',
+    'Strong women clean and still have time for joy.', 'Keep calm and clear the counters.', 'You have already done more than you think.',
+    'One clear corner can change the whole room.', 'Treat yourself after. You will have earned it.', 'This is your house and your rules. Make it shine.',
+    'Show up. Set the timer. Let the progress surprise you.', 'You are building routines your kids will remember.', 'Small wins, big glow.'
+  ];
+  var HALF = ['Halfway there. Keep going.', 'You are past the middle. Finish strong.', 'Half done already. Look at you go.', 'Halfway. The rest is downhill.', 'Half the work is behind you.'];
+  var DONE = ['All done. Your home thanks you.', 'Sparkling work.', 'You did it. Look at that shine.', 'Finished. That is a big win.', 'Beautiful job. Take a breath.', 'Done. Go enjoy your clean space.'];
+
+  /* ---------- challenges ---------- */
+  var LIST14 = ['Junk drawer', 'Kitchen counter clutter', 'Bathroom under the sink', 'Nightstand drawers', 'Coat closet', 'Fridge door and shelves', 'Entry shoe pile', 'Medicine cabinet (toss expired)', 'Tupperware cabinet (match lids)', 'Linen closet', 'Kids’ art and school papers', 'Desk top and drawers', 'Car interior', 'Mail and paper pile'];
+  var LIST30 = ['Junk drawer', 'Silverware tray', 'Spice rack', 'Tupperware lids', 'Pantry shelf', 'Fridge', 'Under the kitchen sink', 'Bathroom counter', 'Under the bathroom sink', 'Medicine cabinet', 'Linen closet', 'Towels', 'Nightstand', 'Dresser top drawer', 'Sock and underwear drawer', 'Closet shoes', 'Handbags and backpacks', 'Coat closet', 'Entry table', 'Living room shelf', 'Coffee table and magazines', 'Kids’ toy bin', 'Kids’ closet', 'Desk', 'Paper pile', 'Cables and chargers', 'Car glove box', 'Garage shelf', 'Cleaning supply cabinet', 'Photos and keepsakes box'];
+  var DEEP30 = [
+    'Kitchen: fridge shelves', 'Kitchen: freezer', 'Kitchen: oven', 'Kitchen: microwave and small appliances', 'Kitchen: cabinet fronts', 'Kitchen: inside the cabinets', 'Kitchen: floors, scrub and mop',
+    'Bathroom: shower and tub', 'Bathroom: toilet and behind it', 'Bathroom: sink, vanity and drawers', 'Bathroom: grout and tile', 'Bathroom: fan, mirror and walls', 'Bathroom: floor and rugs', 'Bathroom: towels, mats and liners',
+    'Bedroom: wash bedding and pillows', 'Bedroom: flip the mattress, vacuum under the bed', 'Bedroom: closet', 'Bedroom: dust and wipe surfaces', 'Kids’ rooms: toys and closets', 'Kids’ rooms: floors and under the beds',
+    'Living room: vacuum the couch', 'Living room: shelves and electronics', 'Living room: windows and sills', 'Living room: baseboards', 'Dining room and entry',
+    'Whole house: ceiling fans and vents', 'Whole house: light switches, doors and handles', 'Laundry room and machines', 'Garage or porch', 'Final walk-through. Enjoy your clean home!'];
+  var WK7 = ['Kitchen: counters and stove', 'Bathrooms', 'Bedrooms: change the sheets', 'Living room and dining', 'Laundry and entry', 'Floors: vacuum and mop', 'Reset day: 15-minute tidy, then rest'];
+  var ZW7 = ['kitchen', 'bath', 'primary', 'living', 'laundry', 'whole', 'whole'];
+
+  var CHALLENGES = [
+    { id: 'reset7', name: '7-Day Home Reset', len: '1 week', days: 7, auto: 'min', min: 15, desc: 'A different focus every day. 15 minutes a day gets the whole house back on track.',
+      task: function (d) { return { t: WK7[d - 1], zone: ZW7[d - 1] }; } },
+    { id: 'kit7', name: '7-Day Kitchen Overhaul', len: '1 week', days: 7, auto: null, desc: 'One kitchen area a day. By Sunday it shines.',
+      task: function (d) { return { t: ['Fridge and freezer', 'Pantry and cabinets', 'Oven and stovetop', 'Microwave and small appliances', 'Sink, drain and dishwasher', 'Counters, backsplash and trash can', 'Floors, mop and shine'][d - 1], zone: 'kitchen' }; } },
+    { id: 'bath5', name: '5-Day Bathroom Makeover', len: '5 days', days: 5, auto: null, desc: 'Five short bathroom missions for a sparkling space.',
+      task: function (d) { return { t: ['Toilet, inside and out', 'Sink, vanity and mirror', 'Shower and tub', 'Floors, grout and rugs', 'Declutter drawers and restock'][d - 1], zone: 'bath' }; } },
+    { id: 'dec14', name: '14-Day Declutter', len: '2 weeks', days: 14, auto: null, desc: 'One spot a day. Bag up the trash and donations as you go.',
+      task: function (d) { return { t: 'Declutter: ' + LIST14[d - 1], zone: 'whole' }; } },
+    { id: 'habit21', name: '21-Day Daily Habit Builder', len: '3 weeks', days: 21, auto: 'min', min: 15, desc: 'Fifteen minutes a day for 21 days builds a routine that sticks. The day checks itself when you log 15 minutes.',
+      task: function (d) { return { t: d % 7 === 0 ? 'Rest-ish day: 15 minutes, any room you like.' : 'Daily 15: dishes, counters, beds, floors, trash.', zone: 'kitchen' }; } },
+    { id: 'dec30', name: '30-Day Declutter', len: '30 days', days: 30, auto: null, desc: 'One small area a day. Tiny, but it adds up to a lighter home.',
+      task: function (d) { return { t: 'Declutter: ' + LIST30[d - 1], zone: 'whole' }; } },
+    { id: 'deep30', name: '30-Day Deep Clean', len: '30 days', days: 30, auto: 'min', min: 15, desc: 'Every room, top to bottom, one area per day. Log 15 minutes and the day checks itself.',
+      task: function (d) { var t = DEEP30[d - 1]; var z = /^Kitchen/.test(t) ? 'kitchen' : /^Bath/.test(t) ? 'bath' : /^Bedroom/.test(t) ? 'primary' : /^Kids/.test(t) ? 'kids' : /^Living/.test(t) ? 'living' : /^Dining/.test(t) ? 'dining' : /^Laundry/.test(t) ? 'laundry' : 'whole'; return { t: t, zone: z }; } },
+    { id: 'ten30', name: '10 Minutes a Day for 30 Days', len: '30 days', days: 30, auto: 'min', min: 10, desc: 'Just ten minutes a day. The day checks itself when you log 10 minutes.',
+      task: function (d) { return { t: 'Clean for 10 minutes. Any room, any task.', zone: 'whole' }; } },
+    { id: 'items100', name: '100 Items Out', len: '30 days', days: 30, auto: null, goal: 100, unit: 'items', desc: 'Remove 100 things you do not need: trash, recycle, donate or sell. Count each one and watch the number climb.',
+      task: function (d) { return { t: 'Remove ' + (d === 30 ? 'the last few' : 'about 3 or 4') + ' items today. Tap the + button to count them.', zone: 'whole' }; } },
+    { id: 'kidweek', name: 'Kids’ Chore Week', len: '1 week', days: 7, auto: null, desc: 'A week of age-friendly chores. Let the kids check them off and earn points.',
+      task: function (d) { return { t: ['Make your bed and pick up your floor', 'Put away your toys and books', 'Help set and clear the table', 'Fold and put away your own laundry', 'Wipe a bathroom sink and mirror', 'Sweep or vacuum your room', 'Family 10-minute cleanup party'][d - 1], zone: 'kids' }; } }
+  ];
+
+  var SUPPLIES = ['All-purpose spray', 'Glass cleaner', 'Disinfecting wipes', 'Toilet bowl cleaner', 'Bathroom scrub', 'Baking soda', 'White vinegar', 'Dish soap', 'Microfiber cloths', 'Scrub sponges', 'Rubber gloves', 'Trash bags', 'Mop pads or refills', 'Vacuum bags or filters', 'Laundry detergent', 'Magic erasers', 'Duster', 'Squeegee'];
+
+  window.GH = { ZONES: ZONES, TASKS: TASKS, FREQ: FREQ, SPRINTS: SPRINTS, QUOTES: QUOTES, HALF: HALF, DONE: DONE, CHALLENGES: CHALLENGES, SUPPLIES: SUPPLIES };
+})();
+</script>
+<script>
+/* Little Flower Clean app logic */
+(function () {
+  'use strict';
+  var D = window.GH;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var pad = function (n) { return String(n).padStart(2, '0'); };
+  var fmt = function (s) { s = Math.max(0, Math.round(s)); var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60); return h ? h + ':' + pad(m) + ':' + pad(s % 60) : m + ':' + pad(s % 60); };
+  var ymd = function (d) { d = d || new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+  var addDays = function (s, n) { var d = new Date(s + 'T00:00:00'); d.setDate(d.getDate() + n); return ymd(d); };
+  var dayDiff = function (a, b) { return Math.round((Date.parse(b + 'T00:00:00') - Date.parse(a + 'T00:00:00')) / 86400000); };
+  var rnd = function (arr) { return arr[Math.floor(Math.random() * arr.length)]; };
+  var hash = function (s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
+
+  /* ---------- icons ---------- */
+  var IC = {
+    home: '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+    kitchen: '<path d="M5 10h14v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path d="M3 10h18M9 6V4M15 6V4"/>',
+    bath: '<path d="M3 12h18v3a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M6 12V6a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2"/>',
+    bed: '<path d="M3 18V7M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="1.5"/>',
+    star: '<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/>',
+    sofa: '<path d="M4 11V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3"/><path d="M2 13a2 2 0 0 1 4 0v2h12v-2a2 2 0 0 1 4 0v5H2z"/><path d="M5 18v2M19 18v2"/>',
+    dining: '<path d="M4 9h16M6 9v10M18 9v10M8 9V6h8v3"/>',
+    washer: '<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M8 6h1M11 6h1"/>',
+    door: '<path d="M6 21V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17M4 21h16"/><circle cx="15" cy="12" r=".8" fill="currentColor"/>',
+    stairs: '<path d="M3 20h5v-5h5v-5h5V5h3"/>',
+    desk: '<path d="M3 8h18v3H3zM5 11v9M19 11v9M9 14h6v3H9z"/>',
+    garage: '<path d="M3 20V9l9-5 9 5v11M7 20v-7h10v7M7 15h10"/>',
+    car: '<path d="M5 16v-4l2-5h10l2 5v4M3 16h18v3H3zM7 19v1M17 19v1"/><circle cx="8" cy="13" r="1"/><circle cx="16" cy="13" r="1"/>',
+    sparkle: '<path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/><path d="M19 3v3M20.5 4.5h-3"/>',
+    check: '<path d="M4 12l5 5L20 6"/>',
+    timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/>',
+    trophy: '<path d="M8 4h8v6a4 4 0 0 1-8 0z"/><path d="M8 6H4v2a3 3 0 0 0 4 3M16 6h4v2a3 3 0 0 1-4 3M12 14v4M8 21h8M10 18h4"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',
+    play: '<path d="M7 4l13 8-13 8z" fill="currentColor"/>',
+    pause: '<path d="M7 4h4v16H7zM13 4h4v16h-4z" fill="currentColor"/>',
+    prev: '<path d="M19 5L9 12l10 7z" fill="currentColor"/><path d="M6 5v14"/>',
+    next: '<path d="M5 5l10 7-10 7z" fill="currentColor"/><path d="M18 5v14"/>',
+    close: '<path d="M6 6l12 12M18 6L6 18"/>',
+    voice: '<path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/>',
+    bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/>',
+    chev: '<path d="M15 5l-7 7 7 7"/>'
+  };
+  var ic = function (n) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (IC[n] || '') + '</svg>'; };
+
+  /* ---------- state + persistence ---------- */
+  var KEY = 'glowhome.v1';
+  var defState = function () { return { v: 1, s: { voice: true, beeps: true, flash: true, theme: 'auto', budget: 30 }, start: ymd(), done: {}, prev: {}, ov: {}, who: {}, custom: [], kids: [], log: [], ch: {}, sup: {}, upd: 0 }; };
+  var S = defState();
+  function mergeState(o) {
+    if (!o || typeof o !== 'object') return;
+    var d = defState();
+    S = Object.assign({}, d, o, { s: Object.assign({}, d.s, o.s || {}) });
+    ['done', 'prev', 'ov', 'who', 'ch', 'sup'].forEach(function (k) { if (!S[k] || typeof S[k] !== 'object' || Array.isArray(S[k])) S[k] = {}; });
+    ['custom', 'kids', 'log'].forEach(function (k) { if (!Array.isArray(S[k])) S[k] = []; });
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(S.start)) S.start = ymd();
+  }
+  try { var raw = localStorage.getItem(KEY); if (raw) mergeState(JSON.parse(raw)); } catch (e) { /* storage unavailable */ }
+  var cloudRef = null, saveTimer = 0, cloudBusy = false, cloudDirty = false;
+  function save() {
+    S.upd = Date.now();
+    if (S.log.length > 600) S.log = S.log.slice(-600);
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ }
+    cloudDirty = true; clearTimeout(saveTimer); saveTimer = setTimeout(pushCloud, 1500);
+  }
+  function pushCloud() {
+    if (!cloudRef || cloudBusy || !cloudDirty) return;
+    cloudBusy = true; cloudDirty = false;
+    cloudRef.set({ state: S }).then(function () { cloudBusy = false; if (cloudDirty) saveTimer = setTimeout(pushCloud, 1500); }, function () { cloudBusy = false; });
+  }
+  function initCloud() {
+    try {
+      var c = window.claude;
+      if (!c || !c.use) return;
+      Promise.all([c.use('user'), c.use('db')]).then(function (r) {
+        var user = r[0], db = r[1];
+        if (!user || !db) return null;
+        return user.id().then(function (id) {
+          if (!id) return null;
+          cloudRef = db.doc('data/users/' + id + '/glowhome');
+          return cloudRef.get().then(function (snap) {
+            var o = snap.exists ? (snap.data() || {}).state : null;
+            if (o && (o.upd || 0) > (S.upd || 0)) {
+              mergeState(o);
+              try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ }
+              applyTheme(); render();
+            } else if (S.upd) { cloudDirty = true; pushCloud(); }
+          });
+        });
+      }).catch(function () { /* cloud sync is optional */ });
+    } catch (e) { /* optional */ }
+  }
+  function applyTheme() {
+    var el = document.documentElement;
+    if (S.s.theme === 'light' || S.s.theme === 'dark') el.setAttribute('data-theme', S.s.theme); else el.removeAttribute('data-theme');
+  }
+  applyTheme();
+
+  /* ---------- audio, voice, wake lock ---------- */
+  var AC = null;
+  function audio() {
+    try {
+      if (!AC) { var C = window.AudioContext || window.webkitAudioContext; if (C) AC = new C(); }
+      if (AC && AC.state === 'suspended') AC.resume();
+    } catch (e) { AC = null; }
+    return AC;
+  }
+  function beep(freq, dur, vol, delay) {
+    if (!S.s.beeps) return;
+    var a = audio(); if (!a) return;
+    try {
+      var t0 = a.currentTime + (delay || 0), o = a.createOscillator(), g = a.createGain();
+      o.type = 'sine'; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(vol || 0.4, t0 + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + (dur || 0.12));
+      o.connect(g); g.connect(a.destination); o.start(t0); o.stop(t0 + (dur || 0.12) + 0.03);
+    } catch (e) { /* ignore */ }
+  }
+  function goBeep() { beep(1046, 0.14, 0.45, 0); beep(1318, 0.4, 0.45, 0.17); }
+  function restBeep() { beep(659, 0.18, 0.4, 0); beep(494, 0.3, 0.4, 0.2); }
+  function chime() { beep(784, 0.2, 0.4, 0); beep(988, 0.2, 0.4, 0.2); beep(1175, 0.2, 0.4, 0.4); beep(1568, 0.6, 0.4, 0.6); }
+  function say(text, o) {
+    o = o || {};
+    if (!S.s.voice || !text || !('speechSynthesis' in window)) return;
+    try {
+      if (o.interrupt) speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.rate = o.rate || 1.05; u.lang = 'en-US';
+      speechSynthesis.speak(u);
+    } catch (e) { /* ignore */ }
+  }
+  function primeVoice() {
+    try { if ('speechSynthesis' in window) { var u = new SpeechSynthesisUtterance('ready'); u.volume = 0; speechSynthesis.speak(u); } } catch (e) { /* ignore */ }
+  }
+  function buzz(ms) { try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) { /* ignore */ } }
+  function flash(id) {
+    if (!S.s.flash) return;
+    var f = $(id); if (!f) return;
+    f.classList.remove('on'); void f.offsetWidth; f.classList.add('on');
+  }
+  var wake = null;
+  function lock() {
+    try {
+      if (navigator.wakeLock && !wake) {
+        navigator.wakeLock.request('screen').then(function (w) { wake = w; w.addEventListener('release', function () { wake = null; }); }, function () { wake = null; });
+      }
+    } catch (e) { wake = null; }
+  }
+  function unlock() { try { if (wake) wake.release(); } catch (e) { /* ignore */ } wake = null; }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && P.on) lock(); });
+
+  var toastT = 0;
+  function toast(msg) {
+    var t = $('#toast'); t.textContent = msg; t.hidden = false;
+    clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, 3200);
+  }
+
+  /* ---------- tasks, schedule and logging ---------- */
+  var zoneOf = function (id) { return D.ZONES.filter(function (z) { return z.id === id; })[0]; };
+  var chDef = function (id) { return D.CHALLENGES.filter(function (c) { return c.id === id; })[0]; };
+  var spOf = function (id) { return D.SPRINTS.filter(function (s) { return s.id === id; })[0]; };
+  var FKEYS = ['d', 'w', 'b', 'm', 'q', 'y'];
+  var plural = function (n, w) { return n + ' ' + w + (n === 1 ? '' : 's'); };
+
+  function allTasks() {
+    var out = [];
+    D.TASKS.forEach(function (t) { out.push(t); });
+    S.custom.forEach(function (t) { out.push(t); });
+    return out;
+  }
+  function taskById(id) { return allTasks().filter(function (t) { return t.id === id; })[0]; }
+  function fkey(t) { var o = S.ov[t.id]; return (o && o.freq && D.FREQ[o.freq]) ? o.freq : t.freq; }
+  function interval(t) { return D.FREQ[fkey(t)].days; }
+  function hidden(t) { return !!(S.ov[t.id] && S.ov[t.id].hide); }
+  function visibleTasks(zone) { return allTasks().filter(function (t) { return (!zone || t.zone === zone) && !hidden(t); }); }
+  function lastDone(t) {
+    if (S.done[t.id]) return S.done[t.id];
+    var iv = interval(t);
+    return addDays(S.start, (hash(t.id) % iv) - iv);
+  }
+  function since(t) { return dayDiff(lastDone(t), ymd()); }
+  function doneToday(t) { return S.done[t.id] === ymd(); }
+  function isDue(t) { return !doneToday(t) && since(t) >= interval(t); }
+  function ratio(t) { return since(t) / interval(t); }
+  function status(t) {
+    if (doneToday(t)) return { txt: 'Done today', due: false };
+    var late = since(t) - interval(t);
+    if (late > 0) return { txt: plural(late, 'day') + ' late', due: true };
+    if (late === 0) return { txt: 'Due today', due: true };
+    return { txt: 'Due in ' + plural(-late, 'day'), due: false };
+  }
+  function whoOk(t) {
+    var f = V.who; if (f === 'all') return true;
+    var w = S.who[t.id] || '';
+    return f === 'adult' ? w === '' : w === f;
+  }
+
+  function minsOn(d) { return S.log.filter(function (l) { return l.d === d; }).reduce(function (a, l) { return a + l.m; }, 0); }
+  function tasksOn(d) { return S.log.filter(function (l) { return l.d === d && l.k === 'task'; }).length; }
+  function lastDays(n) { var out = []; for (var i = n - 1; i >= 0; i--) out.push(addDays(ymd(), -i)); return out; }
+  function streak() {
+    var a = {}; S.log.forEach(function (l) { a[l.d] = 1; });
+    var d = ymd(), n = 0;
+    if (!a[d]) d = addDays(d, -1);
+    while (a[d]) { n++; d = addDays(d, -1); }
+    return n;
+  }
+  function pointsOf(name) { var wk = lastDays(7); return S.log.filter(function (l) { return l.w === name && wk.indexOf(l.d) >= 0; }).reduce(function (a, l) { return a + l.m; }, 0); }
+
+  function markTask(t, mins) {
+    if (doneToday(t)) return false;
+    S.prev[t.id] = S.done[t.id] || '';
+    S.done[t.id] = ymd();
+    S.log.push({ ts: Date.now(), d: ymd(), n: t.name, m: Math.max(1, Math.round(mins || t.mins)), z: t.zone, k: 'task', id: t.id, w: S.who[t.id] || '' });
+    return true;
+  }
+  function unmarkTask(t) {
+    if (!doneToday(t)) return;
+    if (S.prev[t.id]) S.done[t.id] = S.prev[t.id]; else delete S.done[t.id];
+    for (var i = S.log.length - 1; i >= 0; i--) { if (S.log[i].id === t.id && S.log[i].d === ymd() && S.log[i].k === 'task') { S.log.splice(i, 1); break; } }
+  }
+
+  /* ---------- challenges ---------- */
+  function chState(id) {
+    var s = S.ch[id]; if (!s) return null;
+    var def = chDef(id); if (!def) return null;
+    var dn = dayDiff(s.start, ymd()) + 1;
+    return { def: def, s: s, dn: dn, active: dn >= 1 && dn <= def.days, over: dn > def.days };
+  }
+  function markDay(id, n, on) {
+    var s = S.ch[id]; if (!s) return;
+    var i = s.done.indexOf(n);
+    if (on && i < 0) s.done.push(n);
+    if (!on && i >= 0) s.done.splice(i, 1);
+  }
+  function autoCheck() {
+    var names = [], m = minsOn(ymd());
+    Object.keys(S.ch).forEach(function (id) {
+      var st = chState(id); if (!st || !st.active) return;
+      if (st.def.auto !== 'min' || st.s.done.indexOf(st.dn) >= 0) return;
+      if (m >= (st.def.min || 10)) { markDay(id, st.dn, true); names.push(st.def.name + ' day ' + st.dn); }
+    });
+    return names;
+  }
+  function chStreak(st) {
+    var n = 0, d = Math.min(st.dn, st.def.days);
+    if (st.s.done.indexOf(d) < 0) d--;
+    while (d >= 1 && st.s.done.indexOf(d) >= 0) { n++; d--; }
+    return n;
+  }
+
+  /* ---------- navigation ---------- */
+  var V = { tab: 'today', zone: null, sid: null, ch: null, open: null, more: false, who: 'all' };
+  var Q = { i: Math.floor(Math.random() * D.QUOTES.length) };
+  function go(p) { Object.assign(V, p); render(); window.scrollTo(0, 0); }
+  function tab(t) { go({ tab: t, zone: null, sid: null, ch: null, open: null, more: false }); }
+
+  function render() {
+    var el = $('#view'), html = '';
+    if (V.tab === 'today') html = viewToday();
+    else if (V.tab === 'rooms') html = V.zone ? viewZone(zoneOf(V.zone)) : viewRooms();
+    else if (V.tab === 'sprint') html = V.sid ? viewSprint(spOf(V.sid)) : viewSprints();
+    else if (V.tab === 'chal') html = V.ch ? viewChDetail(V.ch) : viewChal();
+    else html = viewMe();
+    el.innerHTML = html;
+    var nav = [['today', 'Today', 'sparkle'], ['rooms', 'Rooms', 'home'], ['sprint', 'Sprint', 'timer'], ['chal', 'Goals', 'trophy'], ['me', 'Me', 'user']];
+    $('#navin').innerHTML = nav.map(function (n) { return '<button data-a="tab" data-t="' + n[0] + '" class="' + (V.tab === n[0] ? 'on' : '') + '" aria-label="' + n[1] + '">' + ic(n[2]) + n[1] + '</button>'; }).join('');
+    $('#today').textContent = new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
+  }
+
+  function quoteCard() {
+    var q = D.QUOTES[Q.i];
+    return '<div class="card hero stack"><div class="kicker">Today’s push</div><p class="quote-text">' + esc(q) + '</p>' +
+      '<div class="row wrapf"><button class="btn small" data-a="newq">Another one</button><button class="btn small" data-a="copy" data-t="' + esc(q) + '">Copy</button></div></div>';
+  }
+
+  /* ---------- task rows ---------- */
+  function trow(t, showRoom) {
+    var d = doneToday(t), st = status(t), w = S.who[t.id] || '';
+    var z = zoneOf(t.zone);
+    var sub = esc(D.FREQ[fkey(t)].label) + ' · ' + t.mins + ' min' + (showRoom ? ' · ' + esc(t.area) : '') + (w ? ' · ' + esc(w) : '') + (t.kid && !w ? ' · kid-friendly' : '');
+    var h = '<div class="trow ' + (d ? 'done' : '') + '"><button class="check ' + (d ? 'on' : '') + '" data-a="tdone" data-id="' + t.id + '" aria-label="' + (d ? 'Undo ' : 'Mark done: ') + esc(t.name) + '">' + ic('check') + '</button>' +
+      '<div class="tt"><b>' + esc(t.name) + '</b><span class="sub">' + sub + ' <span class="pill ' + (st.due ? 'due' : '') + '">' + st.txt + '</span></span></div>' +
+      '<button class="more" data-a="topen" data-id="' + t.id + '" aria-label="Options for ' + esc(t.name) + '">…</button></div>';
+    if (V.open === t.id) {
+      h += '<div class="tpanel">' + (t.tip ? '<div>' + esc(t.tip) + '</div>' : '') + '<div class="note">' + esc(z.name) + ' · ' + esc(t.area) + '</div><div class="row wrapf">' +
+        (S.kids.length ? '<button class="chip" data-a="twho" data-id="' + t.id + '">Who: ' + esc(w || 'Anyone') + '</button>' : '') +
+        '<button class="chip" data-a="tfreq" data-id="' + t.id + '">Repeat: ' + esc(D.FREQ[fkey(t)].label) + '</button>' +
+        (t.custom ? '<button class="chip" data-a="tdel" data-id="' + t.id + '" data-confirm="Tap again to delete">Delete</button>' : '<button class="chip" data-a="thide" data-id="' + t.id + '">Hide task</button>') + '</div></div>';
+    }
+    return h;
+  }
+
+  /* ---------- today ---------- */
+  function plan() {
+    var today = ymd();
+    var doneMins = S.log.filter(function (l) { return l.d === today && l.k === 'task'; }).reduce(function (a, l) { return a + l.m; }, 0);
+    var left = S.s.budget - doneMins;
+    var zi = function (t) { return D.ZONES.map(function (z) { return z.id; }).indexOf(t.zone); };
+    var due = visibleTasks().filter(function (t) { return isDue(t) && whoOk(t); }).sort(function (a, b) { return ratio(b) - ratio(a) || a.mins - b.mins; });
+    var pick = [], rest = [], tot = 0;
+    due.forEach(function (t) { if (left > 0 && (pick.length === 0 || tot + t.mins <= left)) { pick.push(t); tot += t.mins; } else rest.push(t); });
+    var all = allTasks();
+    var ord = function (a, b) { return zi(a) - zi(b) || all.indexOf(a) - all.indexOf(b); };
+    pick.sort(ord); rest.sort(ord);
+    var dn = visibleTasks().filter(function (t) { return doneToday(t) && whoOk(t); });
+    return { pick: pick, rest: rest, mins: tot, done: dn, doneMins: doneMins };
+  }
+  function grouped(list, showRoom) {
+    var out = '', last = '';
+    list.forEach(function (t) {
+      if (t.zone !== last) { out += '<div class="grp">' + esc(zoneOf(t.zone).name) + '</div>'; last = t.zone; }
+      out += trow(t, showRoom);
+    });
+    return out;
+  }
+  function activeStrip() {
+    var out = '';
+    Object.keys(S.ch).forEach(function (id) {
+      var st = chState(id); if (!st || !st.active) return;
+      var tk = st.def.task(st.dn), done = st.s.done.indexOf(st.dn) >= 0;
+      out += '<button class="rowbtn" data-a="chopen" data-id="' + id + '"><div class="grow"><div class="kicker">' + esc(st.def.name) + ' · Day ' + st.dn + ' of ' + st.def.days + '</div><b>' + esc(tk.t) + '</b></div><span class="chip ' + (done ? 'on' : '') + '">' + (done ? 'Done' : 'Open') + '</span></button>';
+    });
+    return out ? '<div class="stack"><div class="kicker">Your goals today</div>' + out + '</div>' : '';
+  }
+  function viewToday() {
+    var p = plan(), today = ymd(), mn = minsOn(today), pct = Math.min(100, Math.round(100 * p.doneMins / Math.max(1, S.s.budget)));
+    var budgets = [15, 30, 45, 60, 90].map(function (b) { return '<button class="chip ' + (S.s.budget === b ? 'on' : '') + '" data-a="budget" data-v="' + b + '">' + b + ' min</button>'; }).join('');
+    var filt = '';
+    if (S.kids.length) {
+      var opts = [['all', 'Everyone'], ['adult', 'Grown-ups']].concat(S.kids.map(function (k) { return [k, k]; }));
+      filt = '<div class="tabs">' + opts.map(function (o) { return '<button class="chip ' + (V.who === o[0] ? 'on' : '') + '" data-a="who" data-v="' + esc(o[0]) + '">' + esc(o[1]) + '</button>'; }).join('') + '</div>';
+    }
+    var dueAll = visibleTasks().filter(isDue).length;
+    var body;
+    if (p.pick.length) {
+      body = '<button class="btn primary block" data-a="plansprint">Start timed sprint · ' + p.mins + ' min</button>' + '<div class="card" style="padding-top:8px">' + grouped(p.pick, true) + '</div>';
+    } else {
+      body = '<div class="card hero stack"><p class="quote-text">' + (dueAll ? 'You hit your ' + S.s.budget + ' minute goal. Nice work.' : 'Everything is fresh. Enjoy your clean home.') + '</p><button class="btn small" data-a="tab" data-t="sprint" style="align-self:flex-start">Try a quick sprint</button></div>';
+    }
+    var more = '';
+    if (p.rest.length) {
+      more = '<button class="btn block" data-a="more">' + (V.more ? 'Hide' : 'Show') + ' ' + p.rest.length + ' more due ' + (p.rest.length === 1 ? 'task' : 'tasks') + '</button>' + (V.more ? '<div class="card" style="padding-top:8px">' + grouped(p.rest, true) + '</div>' : '');
+    }
+    var dn = p.done.length ? '<div class="kicker">Done today</div><div class="card" style="padding-top:8px">' + grouped(p.done, true) + '</div>' : '';
+    return '<div class="stack"><h1>Let’s make it<br>sparkle.</h1>' + quoteCard() +
+      '<div class="card stack"><div class="stats"><div class="stat"><b>' + mn + '</b><span>Minutes today</span></div><div class="stat"><b>' + tasksOn(today) + '</b><span>Tasks done</span></div></div>' +
+      '<div class="bar"><i style="width:' + pct + '%"></i></div><div class="row between"><span class="note">' + p.doneMins + ' of ' + S.s.budget + ' min goal</span><span class="note">Streak ' + streak() + '</span></div></div>' +
+      '<div><div class="kicker" style="margin-bottom:6px">How much time today?</div><div class="tabs">' + budgets + '</div></div>' + filt + activeStrip() +
+      '<div class="kicker">Today’s plan' + (dueAll ? ' · ' + dueAll + ' due in the house' : '') + '</div>' + body + more + dn + '</div>';
+  }
+
+  /* ---------- rooms ---------- */
+  function viewRooms() {
+    var tiles = D.ZONES.map(function (z) {
+      var list = visibleTasks(z.id), due = list.filter(isDue).length;
+      var fresh = list.length ? Math.round(100 * (list.length - due) / list.length) : 100;
+      return '<button class="tile" data-a="zone" data-id="' + z.id + '">' + ic(z.icon) + (due ? '<i>' + due + ' due</i>' : '<i>fresh</i>') + '<b>' + esc(z.name) + '</b><span>' + esc(z.sub) + '</span><em>' + fresh + '% fresh</em></button>';
+    }).join('');
+    return '<div class="stack"><div><div class="kicker">Every room, every area</div><h1>Rooms</h1></div><div class="grid">' + tiles + '</div></div>';
+  }
+  function viewZone(z) {
+    var list = visibleTasks(z.id), hid = allTasks().filter(function (t) { return t.zone === z.id && hidden(t); });
+    var due = list.filter(isDue), dueMins = due.reduce(function (a, t) { return a + t.mins; }, 0), allMins = list.reduce(function (a, t) { return a + t.mins; }, 0);
+    var areas = [], map = {};
+    list.forEach(function (t) { if (!map[t.area]) { map[t.area] = []; areas.push(t.area); } map[t.area].push(t); });
+    var body = areas.map(function (a) { return '<div class="grp">' + esc(a) + '</div>' + map[a].map(function (t) { return trow(t, false); }).join(''); }).join('');
+    var hidHtml = hid.length ? '<div class="card stack"><div class="kicker">Hidden tasks</div>' + hid.map(function (t) { return '<div class="row between"><span>' + esc(t.name) + '</span><button class="chip" data-a="tshow" data-id="' + t.id + '">Restore</button></div>'; }).join('') + '</div>' : '';
+    var zopts = [];
+    var form = '<div class="card stack"><div class="kicker">Add your own task</div><div class="field"><label for="cName">Task</label><input id="cName" type="text" placeholder="Wipe the patio doors"></div>' +
+      '<div class="form"><div class="field"><label for="cArea">Area</label><input id="cArea" type="text" placeholder="Other"></div><div class="field"><label for="cMins">Minutes</label><input id="cMins" type="number" inputmode="numeric" min="1" max="240" value="5"></div></div>' +
+      '<div class="field"><label for="cFreq">Repeat</label><select id="cFreq">' + FKEYS.map(function (k) { return '<option value="' + k + '"' + (k === 'w' ? ' selected' : '') + '>' + D.FREQ[k].label + '</option>'; }).join('') + '</select></div>' +
+      '<button class="btn" data-a="addtask" data-z="' + z.id + '">Add task</button></div>';
+    return '<div class="stack"><button class="back" data-a="back">' + ic('chev') + 'All rooms</button><div><div class="kicker">' + esc(z.sub) + '</div><h1>' + esc(z.name) + '</h1></div>' +
+      '<div class="row wrapf"><span class="chip on">' + due.length + ' due</span><span class="chip">' + list.length + ' tasks</span></div>' +
+      '<button class="btn primary block" data-a="zsprint" data-id="' + z.id + '" data-mode="due"' + (due.length ? '' : ' disabled') + '>Sprint: what’s due here · ' + dueMins + ' min</button>' +
+      '<button class="btn block" data-a="zsprint" data-id="' + z.id + '" data-mode="all">Sprint: the whole room · ' + allMins + ' min</button>' +
+      '<div class="card" style="padding-top:8px">' + body + '</div>' + hidHtml + form + '</div>';
+  }
+
+  /* ---------- sprints ---------- */
+  function secText(d) { return d >= 60 ? (d % 60 ? Math.floor(d / 60) + ':' + pad(d % 60) : Math.floor(d / 60) + ' min') : d + 's'; }
+  function viewSprints() {
+    var p = plan();
+    var rows = D.SPRINTS.map(function (s) {
+      return '<button class="rowbtn" data-a="sp" data-id="' + s.id + '"><div class="grow"><b>' + esc(s.name) + '</b><span class="sub">' + esc(s.desc) + (s.kids ? ' · Kid friendly' : '') + '</span></div><span class="meta">' + s.mins + ' min</span></button>';
+    }).join('');
+    return '<div class="stack"><div><div class="kicker">Beat the clock</div><h1>Power Sprints</h1></div>' +
+      '<p class="muted">The timer beeps, speaks and flashes at every change, with a countdown at 5 seconds. Just like a workout.</p>' +
+      '<div class="card stack"><div class="kicker">Built from your tasks</div><p>' + (p.pick.length ? p.pick.length + ' tasks from today’s plan, about ' + p.mins + ' minutes.' : 'Nothing due right now. Pick a quick sprint below.') + '</p>' +
+      '<button class="btn primary block" data-a="plansprint"' + (p.pick.length ? '' : ' disabled') + '>Start sprint from my plan</button></div>' +
+      '<div class="kicker">Quick sprints</div>' + rows +
+      '<div class="kicker">Focus timer</div><div class="card stack"><p class="muted">Clean in focused rounds with short breaks.</p><div class="tabs">' +
+      [['20 / 5', 20, 5, 3], ['15 / 3', 15, 3, 4], ['25 / 5', 25, 5, 2], ['10 / 2', 10, 2, 3]].map(function (x) { return '<button class="chip" data-a="preset" data-w="' + x[1] + '" data-r="' + x[2] + '" data-n="' + x[3] + '">' + x[0] + '</button>'; }).join('') + '</div>' +
+      '<div class="form"><div class="field"><label for="fWork">Clean (min)</label><input id="fWork" type="number" inputmode="numeric" min="1" max="90" value="20"></div><div class="field"><label for="fBreak">Break (min)</label><input id="fBreak" type="number" inputmode="numeric" min="0" max="30" value="5"></div>' +
+      '<div class="field"><label for="fRounds">Rounds</label><input id="fRounds" type="number" inputmode="numeric" min="1" max="10" value="3"></div></div><button class="btn block" data-a="fstart">Start focus timer</button></div></div>';
+  }
+  function viewSprint(s) {
+    var rows = s.steps.map(function (e) { return '<li><span class="row" style="align-items:flex-start"><i class="dot ' + ({ warm: 'warm', work: '', rest: 'rest', cool: 'cool' }[e.t] || '') + '"></i><span>' + esc(e.n) + '</span></span><span>' + secText(e.d) + '</span></li>'; }).join('');
+    return '<div class="stack"><button class="back" data-a="sback">' + ic('chev') + 'All sprints</button><div><div class="kicker">Power sprint</div><h1>' + esc(s.name) + '</h1></div>' +
+      '<div class="row wrapf"><span class="chip on">' + s.mins + ' min</span>' + (s.kids ? '<span class="chip">Kid friendly</span>' : '') + '<span class="chip">' + s.steps.length + ' steps</span></div><p class="muted">' + esc(s.desc) + '</p>' +
+      '<button class="btn primary block" data-a="sstart" data-id="' + s.id + '">Start sprint</button><div class="note">A 10 second get-ready countdown starts first. You hear a beep and voice at every change, with a countdown at 5 seconds.</div>' +
+      '<div class="card"><div class="kicker" style="margin-bottom:6px">Step by step</div><ul class="steps">' + rows + '</ul></div></div>';
+  }
+  function sprintFromTasks(list, name) {
+    var steps = [{ t: 'warm', n: 'Grab your supplies', d: 30, tip: 'Spray, cloths, trash bag and a basket.' }], lastZ = null;
+    list.forEach(function (t) {
+      var zn = zoneOf(t.zone).name;
+      if (lastZ && lastZ !== t.zone) steps.push({ t: 'rest', n: 'Move to ' + zn, d: 10 });
+      steps.push({ t: 'work', n: t.name, d: Math.max(60, t.mins * 60), r: zn, tip: t.tip || '', task: t.id, say: zn + '. ' + t.name + '.' + (t.tip ? ' ' + t.tip : '') });
+      lastZ = t.zone;
+    });
+    steps.push({ t: 'cool', n: 'Final look', d: 30, tip: 'Walk through and admire your work.' });
+    var secs = steps.reduce(function (a, s) { return a + s.d; }, 0);
+    return { id: 'tasks-x', name: name, steps: steps, secs: secs, mins: Math.max(1, Math.round(secs / 60)), tasks: true };
+  }
+  function buildFocus() {
+    var g = function (id, lo, hi, def) { var v = parseInt(($(id) || {}).value, 10); return isFinite(v) ? Math.min(hi, Math.max(lo, v)) : def; };
+    var work = g('#fWork', 1, 90, 20), brk = g('#fBreak', 0, 30, 5), rounds = g('#fRounds', 1, 10, 3);
+    var steps = [{ t: 'warm', n: 'Grab your supplies', d: 30, tip: 'Pick the room, set the music.' }];
+    for (var r = 1; r <= rounds; r++) {
+      steps.push({ t: 'work', n: 'Clean', d: work * 60, r: 'Round ' + r + ' of ' + rounds, tip: 'One room, one job at a time.' });
+      if (brk > 0 && r < rounds) steps.push({ t: 'rest', n: 'Break', d: brk * 60, tip: 'Sip water. Stretch.' });
+    }
+    var secs = steps.reduce(function (a, s) { return a + s.d; }, 0);
+    return { id: 'focus-x', name: 'Focus Clean', steps: steps, secs: secs, mins: Math.max(1, Math.round(secs / 60)) };
+  }
+
+  /* ---------- challenges views ---------- */
+  function viewChal() {
+    var act = '', browse = '';
+    D.CHALLENGES.forEach(function (c) {
+      var st = chState(c.id);
+      if (st) {
+        var pct = Math.round(100 * st.s.done.length / c.days);
+        act += '<button class="rowbtn" data-a="chopen" data-id="' + c.id + '"><div class="grow stack" style="gap:8px"><div><div class="kicker">' + (st.over ? 'Finished' : 'Day ' + st.dn + ' of ' + c.days) + '</div><b>' + esc(c.name) + '</b></div><div class="bar"><i style="width:' + pct + '%"></i></div></div><span class="meta">' + st.s.done.length + '/' + c.days + '</span></button>';
+      } else {
+        browse += '<div class="card stack"><div class="row between"><b>' + esc(c.name) + '</b><span class="chip">' + esc(c.len) + '</span></div><p class="muted">' + esc(c.desc) + '</p><button class="btn small primary" data-a="chstart" data-id="' + c.id + '" style="align-self:flex-start">Start challenge</button></div>';
+      }
+    });
+    return '<div class="stack"><div><div class="kicker">Reset, declutter, deep clean</div><h1>Goals</h1></div>' + (act ? '<div class="kicker">Active</div>' + act : '') + '<div class="kicker">' + (act ? 'Add another' : 'Pick a challenge') + '</div>' + browse + '</div>';
+  }
+  function viewChDetail(id) {
+    var st = chState(id), c = chDef(id);
+    if (!st) return '<div class="stack"><button class="back" data-a="chback">' + ic('chev') + 'Goals</button><p>Challenge not started.</p></div>';
+    var n = st.s.done.length, pct = Math.round(100 * n / c.days), today = '';
+    if (st.active) {
+      var tk = c.task(st.dn), done = st.s.done.indexOf(st.dn) >= 0;
+      today = '<div class="card hero stack"><div class="kicker">Day ' + st.dn + ' of ' + c.days + '</div><p class="quote-text">' + esc(tk.t) + '</p><div class="row wrapf"><button class="btn small" data-a="chgo" data-z="' + tk.zone + '">Open ' + esc(zoneOf(tk.zone).name) + '</button><button class="btn small" data-a="tday" data-id="' + id + '" data-n="' + st.dn + '">' + (done ? 'Done. Tap to undo' : 'Mark done') + '</button></div></div>';
+    } else if (st.over) {
+      today = '<div class="card hero stack"><div class="kicker">Challenge finished</div><p class="quote-text">You completed ' + n + ' of ' + c.days + ' days. Be proud of that.</p></div>';
+    }
+    var cells = '';
+    for (var d = 1; d <= c.days; d++) {
+      var cls = st.s.done.indexOf(d) >= 0 ? 'done' : (d === st.dn ? 'today' : (d < st.dn ? 'miss' : 'future'));
+      cells += '<button class="day ' + cls + '" data-a="tday" data-id="' + id + '" data-n="' + d + '" ' + (d > st.dn ? 'disabled' : '') + ' aria-label="Day ' + d + '">' + d + '</button>';
+    }
+    var cnt = '';
+    if (c.goal) {
+      var k = st.s.count || 0;
+      cnt = '<div class="card stack"><div class="row between"><b>' + k + ' of ' + c.goal + ' ' + c.unit + '</b><span class="muted">' + Math.max(0, c.goal - k) + ' to go</span></div><div class="bar"><i style="width:' + Math.min(100, Math.round(100 * k / c.goal)) + '%"></i></div>' +
+        '<div class="row wrapf">' + [[-1, '−1'], [1, '+1'], [5, '+5'], [10, '+10']].map(function (x) { return '<button class="chip" data-a="cnt" data-id="' + id + '" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div></div>';
+    }
+    var auto = c.auto === 'min' ? '<p class="note">This day checks itself when you log ' + c.min + ' minutes of cleaning (tasks or sprints).</p>' : '';
+    return '<div class="stack"><button class="back" data-a="chback">' + ic('chev') + 'Goals</button><div><div class="kicker">' + esc(c.len) + '</div><h1>' + esc(c.name) + '</h1></div><p class="muted">' + esc(c.desc) + '</p>' + today + cnt +
+      '<div class="card stack"><div class="row between"><b>' + n + ' of ' + c.days + ' days</b><span class="muted">Streak ' + chStreak(st) + '</span></div><div class="bar"><i style="width:' + pct + '%"></i></div><div class="cal">' + cells + '</div><p class="note">Tap a past day to check it off or undo it.</p>' + auto + '</div>' +
+      '<button class="btn ghost block" data-a="chquit" data-id="' + id + '" data-confirm="Tap again to quit">Quit this challenge</button></div>';
+  }
+
+  /* ---------- me ---------- */
+  function sw(key, label, sub) {
+    return '<button class="switch" data-a="set" data-k="' + key + '"><span><b>' + label + '</b><br><span class="note">' + sub + '</span></span><span class="tog ' + (S.s[key] ? 'on' : '') + '"></span></button>';
+  }
+  function viewMe() {
+    var days = lastDays(7), mins = days.map(minsOn), mx = Math.max.apply(null, mins.concat([1]));
+    var wkT = days.reduce(function (a, d) { return a + tasksOn(d); }, 0);
+    var hist = S.log.slice().sort(function (x, y) { return y.ts - x.ts; }).slice(0, 8).map(function (l) {
+      return '<div class="rowbtn" style="cursor:default"><div class="grow"><b>' + esc(l.n) + '</b><span class="sub">' + esc(l.d) + (l.w ? ' · ' + esc(l.w) : '') + '</span></div><span class="meta" style="font-size:20px">' + l.m + ' min</span></div>';
+    }).join('');
+    var wkdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    var bars = days.map(function (d, i) { var dt = new Date(d + 'T00:00:00'); return '<div class="' + (mins[i] ? '' : 'empty') + '"><i style="height:' + Math.max(4, Math.round(80 * mins[i] / mx)) + 'px"></i>' + wkdays[dt.getDay()] + '</div>'; }).join('');
+    var crew = '<div class="card stack"><div class="kicker">The crew · points this week</div>' + (S.kids.length ? S.kids.map(function (k) {
+      return '<div class="row between"><span><b>' + esc(k) + '</b> <span class="muted">' + pointsOf(k) + ' pts</span></span><button class="chip" data-a="kdel" data-v="' + esc(k) + '" data-confirm="Tap again to remove">Remove</button></div>';
+    }).join('') : '<p class="note">Add your kids, then assign tasks to them with the … button. Each minute of cleaning is one point.</p>') +
+      '<div class="row"><div class="grow"><label class="note" for="kName">Add a name</label><input id="kName" type="text" placeholder="Name"></div><button class="btn small" data-a="kadd" style="align-self:flex-end">Add</button></div></div>';
+    var sup = '<div class="card stack"><div class="kicker">Supply caddy</div><div>' + D.SUPPLIES.map(function (s) { return '<button class="chip ' + (S.sup[s] ? 'on' : '') + '" data-a="sup" data-v="' + esc(s) + '" style="margin:0 6px 6px 0">' + esc(s) + '</button>'; }).join('') + '</div>' +
+      '<p class="note">Tap what you need to buy. Highlighted items go on your shopping list.</p><button class="btn small" data-a="copysup" style="align-self:flex-start">Copy shopping list</button></div>';
+    return '<div class="stack"><div><div class="kicker">Your progress</div><h1>Me</h1></div>' +
+      '<div class="card"><div class="stats"><div class="stat"><b>' + streak() + '</b><span>Day streak</span></div><div class="stat"><b>' + wkT + '</b><span>Tasks, 7 days</span></div><div class="stat"><b>' + mins.reduce(function (a, b) { return a + b; }, 0) + '</b><span>Minutes, 7 days</span></div><div class="stat"><b>' + visibleTasks().filter(isDue).length + '</b><span>Due right now</span></div></div></div>' +
+      '<div class="card stack"><div class="kicker">Minutes per day</div><div class="week">' + bars + '</div></div>' + crew +
+      (hist ? '<div class="kicker">Recent activity</div>' + hist : '<div class="card muted">Check off a task and it shows up here.</div>') + sup +
+      '<div class="card stack"><div class="kicker">Sprint cues</div>' + sw('voice', 'Voice coach', 'Speaks changes and the 5 second countdown') + sw('beeps', 'Beeps', 'Tones at 5, 4, 3, 2, 1 and at every change') + sw('flash', 'Screen flash', 'The screen flashes at each change') +
+      '<button class="btn block" data-a="testsound">Test sound and voice</button><p class="note">On iPhone, keep the screen on during a sprint and turn the silent switch off. The app asks your phone to stay awake.</p></div>' +
+      '<div class="card stack"><div class="kicker">Theme</div><div class="tabs">' + [['auto', 'Auto'], ['light', 'Candy pink'], ['dark', 'Dark']].map(function (t) { return '<button class="chip ' + (S.s.theme === t[0] ? 'on' : '') + '" data-a="theme" data-v="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div></div>' +
+      '<button class="btn ghost block" data-a="reset" data-confirm="Tap again to erase everything">Erase my data</button></div>';
+  }
+
+  /* ---------- sprint player ---------- */
+  var P = { on: false, w: null, steps: [], i: 0, remain: 0, endAt: 0, paused: false, total: 0, timer: 0, cued: {}, half: false, finished: false, quote: '', marked: {}, count: 0 };
+  var PHASE = { ready: 'warm', work: 'work', rest: 'rest', warm: 'warm', cool: 'cool', hold: 'hold' };
+  var PLABEL = { ready: 'Get ready', work: 'Clean', rest: 'Break', warm: 'Prep', cool: 'Wrap up', hold: 'Hold' };
+  var CIRC = 2 * Math.PI * 88;
+
+  function playerHTML() {
+    return '<div class="flash" id="pFlash"></div><div class="col" style="overflow-y:auto">' +
+      '<div class="ptop"><button class="icon" data-a="pEnd" aria-label="End sprint">' + ic('close') + '</button><div class="phase" id="pPhase"></div><div class="row"><button class="icon" id="pVoice" data-a="tvoice" aria-label="Voice on or off">' + ic('voice') + '</button><button class="icon" id="pBeep" data-a="tbeep" aria-label="Beeps on or off">' + ic('bell') + '</button></div></div>' +
+      '<div class="pname" id="pName"></div>' +
+      '<div class="ringwrap"><svg viewBox="0 0 200 200"><circle class="bg" cx="100" cy="100" r="88" fill="none" stroke-width="12"/><circle class="fg" id="pRing" cx="100" cy="100" r="88" fill="none" stroke-width="12" stroke-linecap="round" stroke-dasharray="' + CIRC.toFixed(2) + '" stroke-dashoffset="0"/></svg><div class="mid"><div class="time" id="pTime">0:10</div><div class="note" id="pStep"></div></div></div>' +
+      '<div class="ptip" id="pTip"></div><div class="pnext" id="pNext"></div>' +
+      '<div class="bar"><i id="pBar"></i></div><div class="pfoot"><span id="pElapsed"></span><span id="pLeft"></span></div>' +
+      '<div class="ctrls"><button class="icon" data-a="pPrev" aria-label="Previous">' + ic('prev') + '</button><button class="icon big" id="pPlay" data-a="pPlay" aria-label="Pause or resume">' + ic('pause') + '</button><button class="icon" data-a="pNext" aria-label="Skip">' + ic('next') + '</button></div></div>' +
+      '<div class="sheet" id="pSheet" hidden><div><h2>End sprint?</h2><p class="muted" id="pSheetTxt"></p><button class="btn primary" data-a="pKeep">Keep going</button><button class="btn" data-a="pSave" id="pSaveBtn">Save and end</button><button class="btn ghost" data-a="pDiscard">End without saving</button></div></div>';
+  }
+  function elapsedSec() {
+    var e = 0;
+    for (var k = 1; k < P.i; k++) e += P.steps[k].d;
+    if (P.i >= 1) e += P.steps[P.i].d - P.remain / 1000;
+    return Math.max(0, e);
+  }
+  function sayOf(s) {
+    if (s.say) return s.say;
+    var long = s.tip && s.d >= 40 && s.t === 'work';
+    return s.n + (long ? '. ' + s.tip : '');
+  }
+  function nxSay(s) { return s ? (s.r && s.task ? s.r + '. ' : '') + s.n : ''; }
+
+  /* tasks whose steps are behind index idx count as cleaned */
+  function completeUpTo(idx) {
+    if (!P.w || !P.w.tasks) return;
+    var any = false;
+    for (var k = 1; k < idx && k < P.steps.length; k++) {
+      var st = P.steps[k];
+      if (st.task && !P.marked[st.task]) {
+        P.marked[st.task] = 1;
+        var t = taskById(st.task);
+        if (t && markTask(t, st.d / 60)) { P.count++; any = true; }
+      }
+    }
+    if (any) save();
+  }
+
+  function startPlayer(w) {
+    audio(); primeVoice();
+    P.w = w; P.on = true; P.finished = false; P.paused = false; P.half = false; P.marked = {}; P.count = 0;
+    P.steps = [{ t: 'ready', n: 'Get ready', d: 10 }].concat(w.steps);
+    P.total = w.steps.reduce(function (a, s) { return a + s.d; }, 0);
+    var ov = $('#player'); ov.innerHTML = playerHTML(); ov.hidden = false;
+    document.body.style.overflow = 'hidden';
+    lock(); syncToggles();
+    enter(0);
+    clearInterval(P.timer); P.timer = setInterval(tick, 100);
+  }
+  function syncToggles() {
+    var v = $('#pVoice'), b = $('#pBeep');
+    if (v) v.classList.toggle('off', !S.s.voice);
+    if (b) b.classList.toggle('off', !S.s.beeps);
+  }
+  function enter(i, over) {
+    over = over || 0;
+    while (i + 1 < P.steps.length && over >= P.steps[i].d * 1000) { over -= P.steps[i].d * 1000; i++; }
+    var st = P.steps[i], nx = P.steps[i + 1];
+    P.i = i; P.remain = Math.max(0, st.d * 1000 - over); P.endAt = Date.now() + P.remain; P.cued = {};
+    completeUpTo(i);
+    var ov = $('#player');
+    ov.style.setProperty('--phase', 'var(--c-' + PHASE[st.t] + ')');
+    $('#pPhase').textContent = PLABEL[st.t];
+    $('#pName').textContent = st.t === 'ready' ? 'Get ready' : st.n;
+    $('#pStep').textContent = st.r || '';
+    var restLike = st.t === 'rest' || st.t === 'ready';
+    if (restLike && !st.tip) P.quote = rnd(D.QUOTES);
+    $('#pTip').textContent = st.tip || (restLike ? P.quote : '');
+    var nxt = nx, then = '';
+    if (nx && nx.t === 'rest' && P.steps[i + 2]) { then = ' (after a break)'; nxt = P.steps[i + 2]; }
+    var first = st.t === 'ready' ? P.steps[1] : nxt;
+    $('#pNext').innerHTML = first ? '<span>' + (st.t === 'ready' ? 'First up:' : 'Next:') + '</span> ' + esc(first.n) + '<span>' + then + '</span>' : '<span>Last one. Finish strong.</span>';
+    var msg = '';
+    if (st.t === 'ready') msg = 'Get ready. First up: ' + nxSay(P.steps[1]) + '.';
+    else if (st.t === 'rest') msg = (st.d <= 12 ? 'Switch. ' : 'Break. ') + (nx ? 'Next up: ' + nxSay(nx) + '.' : '');
+    else msg = sayOf(st);
+    if (!P.half && P.total > 0 && elapsedSec() / P.total >= 0.5 && st.t === 'work') { P.half = true; msg = rnd(D.HALF) + ' ' + msg; }
+    if (i > 0) { if (st.t === 'rest') restBeep(); else goBeep(); flash('#pFlash'); buzz(st.t === 'rest' ? 120 : 220); }
+    say(msg, { interrupt: true });
+    paint();
+  }
+  function paint() {
+    var st = P.steps[P.i]; if (!st) return;
+    var sec = Math.ceil(P.remain / 1000);
+    $('#pTime').textContent = fmt(sec);
+    $('#pRing').setAttribute('stroke-dashoffset', (CIRC * (1 - P.remain / (st.d * 1000))).toFixed(2));
+    var el = elapsedSec();
+    $('#pBar').style.width = (P.total ? Math.min(100, 100 * el / P.total) : 0).toFixed(1) + '%';
+    $('#pElapsed').textContent = fmt(el) + ' done';
+    $('#pLeft').textContent = fmt(Math.max(0, P.total - el)) + ' left';
+  }
+  var CUEF = [0, 820, 780, 740, 700, 660];
+  function tick() {
+    if (!P.on || P.paused || P.finished) return;
+    var st = P.steps[P.i];
+    P.remain = Math.max(0, P.endAt - Date.now());
+    var sl = Math.ceil(P.remain / 1000);
+    if (sl >= 1 && sl <= 5 && sl < st.d && !P.cued[sl]) { P.cued[sl] = 1; beep(CUEF[sl], 0.11, 0.4); say(String(sl), { rate: 1.25 }); buzz(30); }
+    else if (sl === 10 && st.d >= 20 && !P.cued[10]) { P.cued[10] = 1; say('10 seconds', { rate: 1.1 }); }
+    else if (sl === 30 && st.d >= 75 && !P.cued[30]) { P.cued[30] = 1; say('30 seconds', { rate: 1.1 }); }
+    paint();
+    if (P.remain <= 0) next(Date.now() - P.endAt);
+  }
+  function next(over) { if (P.i + 1 < P.steps.length) enter(P.i + 1, over || 0); else finish(); }
+  function prev() {
+    var st = P.steps[P.i];
+    if (st.d * 1000 - P.remain > 3000 || P.i <= 1) enter(Math.max(P.i <= 0 ? 0 : 1, P.i)); else enter(P.i - 1);
+  }
+  function togglePause() {
+    var b = $('#pPlay'); if (!b) return;
+    if (!P.paused) { P.remain = Math.max(0, P.endAt - Date.now()); P.paused = true; try { speechSynthesis.cancel(); } catch (e) { /* ignore */ } b.innerHTML = ic('play'); $('#pPhase').textContent = 'Paused'; }
+    else { P.endAt = Date.now() + P.remain; P.paused = false; b.innerHTML = ic('pause'); $('#pPhase').textContent = PLABEL[P.steps[P.i].t]; audio(); }
+  }
+  function logSprint(mins) {
+    S.log.push({ ts: Date.now(), d: ymd(), n: P.w.name, m: Math.max(1, mins), z: '', k: 'sprint', w: '' });
+  }
+  function finish() {
+    P.finished = true; P.on = false; clearInterval(P.timer); unlock();
+    var mins = Math.max(1, Math.round(P.total / 60));
+    if (P.w.tasks) completeUpTo(P.steps.length); else logSprint(mins);
+    var names = autoCheck(); save();
+    chime(); buzz(400); say(rnd(D.DONE) + ' ' + rnd(D.QUOTES), { interrupt: true });
+    $('#player').style.setProperty('--phase', 'var(--c-work)');
+    $('#player').innerHTML = '<div class="col"><div class="done-wrap"><div class="big">Sparkling!</div><div><b style="font-size:20px">' + esc(P.w.name) + '</b><div class="muted">' + mins + ' minutes' + (P.w.tasks ? ' · ' + plural(P.count, 'task') + ' checked off' : ' · saved to your log') + '</div></div>' +
+      '<div class="card hero"><p class="quote-text">' + esc(rnd(D.QUOTES)) + '</p></div>' + (names.length ? '<div class="warn">Goal checked off: ' + esc(names.join(', ')) + '</div>' : '') +
+      '<button class="btn primary block" data-a="pClose">Close</button></div></div>';
+  }
+  function closePlayer() {
+    clearInterval(P.timer); P.on = false;
+    try { speechSynthesis.cancel(); } catch (e) { /* ignore */ }
+    $('#player').hidden = true; $('#player').innerHTML = '';
+    unlock(); document.body.style.overflow = '';
+    render();
+  }
+  function askEnd() {
+    if (!P.on || P.finished) return;
+    if (!P.paused) togglePause();
+    var mins = Math.round(elapsedSec() / 60);
+    $('#pSheetTxt').textContent = mins >= 2 ? 'You cleaned for ' + mins + ' minutes. Save it?' : 'You are just getting started. Keep going, or end now.';
+    $('#pSaveBtn').hidden = mins < 2;
+    $('#pSheet').hidden = false;
+  }
+  function endSave() {
+    var mins = Math.max(1, Math.round(elapsedSec() / 60));
+    if (P.w.tasks) completeUpTo(P.i); else logSprint(mins);
+    var names = autoCheck(); save();
+    toast(names.length ? 'Saved. Goal checked off: ' + names.join(', ') : 'Saved ' + mins + ' minutes' + (P.w.tasks ? ' · ' + plural(P.count, 'task') + ' done' : ''));
+    closePlayer();
+  }
+
+  /* ---------- actions ---------- */
+  function afterLog(msg) {
+    var names = autoCheck(); save();
+    toast(names.length ? (msg ? msg + ' ' : '') + 'Goal checked off: ' + names.join(', ') : msg);
+  }
+  function cycle(arr, cur) { var i = arr.indexOf(cur); return arr[(i + 1) % arr.length]; }
+  function sprintForZone(zid, mode) {
+    var z = zoneOf(zid), list = visibleTasks(zid);
+    if (mode === 'due') list = list.filter(isDue);
+    if (!list.length) { toast('No tasks to sprint here.'); return; }
+    startPlayer(sprintFromTasks(list, z.name + (mode === 'due' ? ' sprint' : ' full reset')));
+  }
+
+  function act(a, ds) {
+    switch (a) {
+      case 'tab': tab(ds.t); break;
+      case 'zone': go({ tab: 'rooms', zone: ds.id, open: null }); break;
+      case 'back': go({ zone: null, open: null }); break;
+      case 'newq': Q.i = (Q.i + 1 + Math.floor(Math.random() * (D.QUOTES.length - 1))) % D.QUOTES.length; render(); break;
+      case 'copy': copyText(ds.t); break;
+      case 'budget': S.s.budget = parseInt(ds.v, 10); save(); render(); break;
+      case 'who': V.who = ds.v; render(); break;
+      case 'more': V.more = !V.more; render(); break;
+      case 'tdone': {
+        var t = taskById(ds.id); if (!t) break;
+        if (doneToday(t)) { unmarkTask(t); save(); render(); break; }
+        markTask(t); afterLog(rnd(D.DONE)); render(); break;
+      }
+      case 'topen': V.open = V.open === ds.id ? null : ds.id; render(); break;
+      case 'twho': S.who[ds.id] = cycle([''].concat(S.kids), S.who[ds.id] || ''); save(); render(); break;
+      case 'tfreq': { var o = S.ov[ds.id] || {}; var tt = taskById(ds.id); o.freq = cycle(FKEYS, fkey(tt)); S.ov[ds.id] = o; save(); render(); break; }
+      case 'thide': S.ov[ds.id] = Object.assign(S.ov[ds.id] || {}, { hide: true }); V.open = null; save(); render(); break;
+      case 'tshow': if (S.ov[ds.id]) delete S.ov[ds.id].hide; save(); render(); break;
+      case 'tdel': S.custom = S.custom.filter(function (c) { return c.id !== ds.id; }); delete S.done[ds.id]; delete S.ov[ds.id]; V.open = null; save(); render(); break;
+      case 'addtask': {
+        var nm = ($('#cName').value || '').trim();
+        if (!nm) { toast('Type a task name first.'); break; }
+        var mn = parseInt($('#cMins').value, 10); if (!isFinite(mn) || mn < 1) mn = 5;
+        S.custom.push({ id: 'c-' + Date.now(), zone: ds.z, area: ($('#cArea').value || '').trim() || 'Other', name: nm, freq: $('#cFreq').value, mins: Math.min(240, mn), kid: false, tip: '', custom: true });
+        save(); render(); toast('Task added'); break;
+      }
+      case 'plansprint': { var p = plan(); if (!p.pick.length) break; startPlayer(sprintFromTasks(p.pick, 'Today’s plan')); break; }
+      case 'zsprint': sprintForZone(ds.id, ds.mode); break;
+      case 'sp': go({ sid: ds.id }); break;
+      case 'sback': go({ sid: null }); break;
+      case 'sstart': { var sp = spOf(ds.id); if (sp) startPlayer(sp); break; }
+      case 'preset': $('#fWork').value = ds.w; $('#fBreak').value = ds.r; $('#fRounds').value = ds.n; break;
+      case 'fstart': startPlayer(buildFocus()); break;
+      case 'set': S.s[ds.k] = !S.s[ds.k]; save(); render(); break;
+      case 'theme': S.s.theme = ds.v; applyTheme(); save(); render(); break;
+      case 'testsound': audio(); primeVoice(); goBeep(); say('Sound check. Five, four, three, two, one. Go!', { interrupt: true }); break;
+      case 'reset': S = defState(); try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ } applyTheme(); save(); render(); toast('Data erased'); break;
+      case 'tvoice': S.s.voice = !S.s.voice; save(); syncToggles(); break;
+      case 'tbeep': S.s.beeps = !S.s.beeps; save(); syncToggles(); break;
+      case 'pEnd': askEnd(); break;
+      case 'pKeep': $('#pSheet').hidden = true; if (P.paused) togglePause(); break;
+      case 'pSave': endSave(); break;
+      case 'pDiscard': closePlayer(); break;
+      case 'pPlay': togglePause(); break;
+      case 'pPrev': prev(); break;
+      case 'pNext': next(0); break;
+      case 'pClose': closePlayer(); break;
+      case 'kadd': {
+        var kn = ($('#kName').value || '').trim().slice(0, 20);
+        if (!kn) { toast('Type a name first.'); break; }
+        if (S.kids.indexOf(kn) < 0) S.kids.push(kn);
+        save(); render(); break;
+      }
+      case 'kdel': S.kids = S.kids.filter(function (k) { return k !== ds.v; }); Object.keys(S.who).forEach(function (id) { if (S.who[id] === ds.v) delete S.who[id]; }); if (V.who === ds.v) V.who = 'all'; save(); render(); break;
+      case 'sup': if (S.sup[ds.v]) delete S.sup[ds.v]; else S.sup[ds.v] = 1; save(); render(); break;
+      case 'copysup': {
+        var items = D.SUPPLIES.filter(function (s) { return S.sup[s]; });
+        if (!items.length) { toast('Tap the items you need first.'); break; }
+        copyText('Cleaning supplies to buy:\n- ' + items.join('\n- ')); break;
+      }
+      case 'chstart': S.ch[ds.id] = { start: ymd(), done: [], count: 0 }; autoCheck(); save(); go({ tab: 'chal', ch: ds.id }); toast('Challenge started. Day 1 is today.'); break;
+      case 'chopen': go({ tab: 'chal', ch: ds.id }); break;
+      case 'chback': go({ ch: null }); break;
+      case 'chgo': go({ tab: 'rooms', zone: ds.z, ch: null, open: null }); break;
+      case 'tday': { var st = chState(ds.id), n = parseInt(ds.n, 10); if (!st || n > st.dn) break; markDay(ds.id, n, st.s.done.indexOf(n) < 0); save(); render(); break; }
+      case 'cnt': { var cs = S.ch[ds.id]; if (!cs) break; cs.count = Math.max(0, (cs.count || 0) + parseInt(ds.v, 10)); save(); render(); break; }
+      case 'chquit': delete S.ch[ds.id]; save(); go({ ch: null }); break;
+      default: break;
+    }
+  }
+
+  function copyText(t) {
+    var ok = function () { toast('Copied'); };
+    var fallback = function () {
+      try { var ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); ok(); }
+      catch (e) { toast('Press and hold the text to copy'); }
+    };
+    try { navigator.clipboard.writeText(t).then(ok, fallback); } catch (e) { fallback(); }
+  }
+
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-a]'); if (!el || el.disabled) return;
+    if (el.dataset.confirm && !el.dataset.armed) {
+      el.dataset.armed = '1'; var old = el.textContent; el.textContent = el.dataset.confirm;
+      setTimeout(function () { if (el.isConnected) { delete el.dataset.armed; el.textContent = old; } }, 3000);
+      return;
+    }
+    act(el.dataset.a, el.dataset, el);
+  });
+
+  render();
+  initCloud();
+})();
+</script>
+</body></html>
